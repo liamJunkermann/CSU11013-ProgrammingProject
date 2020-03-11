@@ -1,0 +1,3 @@
+class Row{
+    int colNum;
+}
