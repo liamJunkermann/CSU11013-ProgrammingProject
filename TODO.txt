@@ -5,7 +5,7 @@ CHARLES CHRISTIANSSON
 - 
 
 LIAM JUNKERMANN
-- 
+- Working on Graph with Charlie
 
 LIAM O LIONAIRD
 - working on sidebar functionality
