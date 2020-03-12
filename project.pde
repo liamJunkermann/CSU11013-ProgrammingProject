@@ -16,7 +16,7 @@ void setup(){
 }
 
 void draw(){
-  background(255);
+  background(backgroundLight);
   drawWidgets();
 }
 
@@ -97,7 +97,7 @@ ArrayList<Widget> createWidgets(){
           countY = 0;
           countX += wWidth + 10;
       }
-      returnContent.add(new Widget(startX+countX, startY+countY,wWidth, wHeight, ticker, color(255, 0,0),font, tickers.indexOf(ticker)));
+      returnContent.add(new Widget(startX+countX, startY+countY,wWidth, wHeight, ticker, backgroundDark,font, tickers.indexOf(ticker)));
       countY += wHeight + 10;
     }
     return returnContent;
@@ -115,11 +115,11 @@ void mouseMoved(){
   for(Widget widget : widgets){
     event = widget.getEvent(mouseX, mouseY);
     if(event!= EVENT_NULL){
-      widget.strokeColour = color(255);
-      widget.widgetColor = color(200,0,0);
-    } else {
       widget.strokeColour = color(0);
-      widget.widgetColor = color(255,0,0);
+      widget.widgetColor = color(0);
+    } else {
+      widget.strokeColour = color(255);
+      widget.widgetColor = backgroundDark;
     }
   }
 }

@@ -8,8 +8,8 @@ class Widget {
     this.x=x; this.y=y; this.width = width; this.height= height;
     this.label=label; this.event=event;
     this.widgetColor=widgetColor; this.widgetFont=widgetFont;
-    labelColor= color(0);
-    strokeColour = color(0);
+    labelColor= textColor;
+    strokeColour = color(255);
   }
   void draw(){
     stroke(strokeColour);
@@ -29,38 +29,3 @@ class Widget {
       }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
