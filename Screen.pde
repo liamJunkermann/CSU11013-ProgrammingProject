@@ -17,7 +17,8 @@ class Screen {
 
   void draw() {
     background(backgroundLight);
-    text("test", 250, 250);
+    text(ticker, 200, 50);
+    text("Open Price: " + open_price,200,100);
     backButton.draw();
   }
 }

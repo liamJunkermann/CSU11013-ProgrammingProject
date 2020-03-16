@@ -90,7 +90,7 @@ void loadData(String[] dataToLoad) {
       }
     }
     data[addLocation].add(currdp);
-    init_screens(currdp, tickers.get(addLocation));
+    init_screens(currdp, tickers.get();
   }
 }
 
