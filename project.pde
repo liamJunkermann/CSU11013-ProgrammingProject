@@ -43,15 +43,15 @@ void loadData(String[] dataToLoad) {
     int count = 0;
     Datapoint currdp = new Datapoint();
 
-    for (char letter : charLine) { 
+    for (char letter : charLine) { // this loop iterates through each array until it finds a comma. Once comma is found it checks which "column" the string data is and then store that data in a new datapoint object. Once all the data is loaded (eg. the entire row is handled), it gets added to an arraylist with the rest of the datapoints for the ticker.
       if (letter != ',') {
         currentWord += letter;
       } else {
         //println(currentWord);
-        switch(count) { 
-          case(0):
+        switch(count) {
+          case(0):// This case handles where to store the datapoint object. If its a new ticker a new location is made, otherwise we find the right location to store at.
           int tickerLoc = tickers.indexOf(currentWord);
-          if (tickerLoc<0) {
+          if (tickerLoc<0) { 
             // Create new ticker
             data = Arrays.copyOf(data, data.length+1);
             data[data.length-1] = new ArrayList<Datapoint>();
@@ -62,6 +62,9 @@ void loadData(String[] dataToLoad) {
             TableRow infoRow = stockInfo.findRow(currentWord, "ticker"); //<>//
             textPanels.add(new TextPanel(infoRow.getString("ticker"), infoRow.getString("exchange"), infoRow.getString("name"), infoRow.getString("sector"), infoRow.getString("industry"), font));
             // End of text panel update
+
+            // Update screen
+            init_screens(currdp); // change constructor(?)
           } else {
             // Exists
             addLocation = tickerLoc;
@@ -101,7 +104,6 @@ void loadData(String[] dataToLoad) {
       }
     }
     data[addLocation].add(currdp);
-    init_screens(currdp);
   }
 }
 
