@@ -1,4 +1,4 @@
-// Load Data //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
+// Load Data //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
 ArrayList[] data;
 ArrayList<String> tickers;
 ArrayList<Widget> widgets;
@@ -10,13 +10,14 @@ void setup() {
   size(500, 500);
   String[] dataToLoad = loadStrings("daily_prices1k.csv");
   font = loadFont("ArialMT-32.vlw");
-  textFont(font); //<>// //<>// //<>// //<>// //<>// //<>//
+  textFont(font); //<>// //<>// //<>// //<>//
   tickers = new ArrayList<String>();
   data = new ArrayList[0];
   screens = new ArrayList<Screen>();
   screenCount = -1;
   loadData(dataToLoad);
   widgets = createWidgets();
+  setScreenTicker();
 }
 
 void draw() {
@@ -90,7 +91,7 @@ void loadData(String[] dataToLoad) {
       }
     }
     data[addLocation].add(currdp);
-    init_screens(currdp, tickers.get();
+    init_screens(currdp);
   }
 }
 
@@ -119,9 +120,15 @@ void drawWidgets() {
   }
 }
 
-void init_screens(Datapoint stock, String ticker) {
-  screens.add(new Screen (stock, ticker));
+void init_screens(Datapoint stock) {
+  screens.add(new Screen (stock));
 }
+void setScreenTicker() {
+  for (int i =0; i < tickers.size(); i ++) {
+    screens.get(i).setTicker(tickers.get(i));
+  }
+}
+
 
 void mouseMoved() {
   int event;
@@ -155,7 +162,9 @@ void mousePressed() {
       screenCount = event;
     }
   }
-  if (screens.get(screenCount).backButton.getEvent(mouseX, mouseY) == 1) {
-    screenCount = EVENT_NULL;
+  if (screenCount!= EVENT_NULL) {
+    if (screens.get(screenCount).backButton.getEvent(mouseX, mouseY) == 1) {
+      screenCount = EVENT_NULL;
+    }
   }
 }

@@ -4,14 +4,13 @@ class Screen {
   String ticker;
   Widget backButton;
 
-  Screen(Datapoint stock, String ticker) {
+  Screen(Datapoint stock) {
     this.open_price = stock.open_price;
     this.close_price = stock.close_price;
     this.adjusted_close = stock.adjusted_close;
     this.low = stock.low;
     this.high = stock.high;
     this.volume = stock.volume;
-    this.ticker = ticker;
     backButton = new Widget(400, 400, 50, 50, "back", backgroundDark, font, 1);
   }
 
@@ -20,5 +19,8 @@ class Screen {
     text(ticker, 200, 50);
     text("Open Price: " + open_price,200,100);
     backButton.draw();
+  }
+  void setTicker (String ticker){
+    this.ticker = ticker;
   }
 }
