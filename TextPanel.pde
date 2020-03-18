@@ -15,6 +15,17 @@ class TextPanel{
         this.currentValue = currentValue;
         this.font = font;
     }
+
+    // Without currentValue
+    TextPanel(String ticker, String exchange, String name, String sector, String industry, PFont font){
+        this.ticker = ticker;
+        this.exchange = exchange;
+        this.name = name;
+        this.sector = sector;
+        this.industry = industry;
+        this.currentValue = 0;
+        this.font = font;
+    }
     
     // Mainly a test constructor
     TextPanel(PFont font){

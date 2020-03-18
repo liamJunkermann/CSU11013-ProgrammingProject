@@ -1,19 +1,24 @@
-// Load Data //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
-ArrayList[] data;
+// Load Data //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
+ArrayList[] data; // data is basically an array to store more datapoint arraylists. 
+                  // Where all the stock data for each ticker is stored in the same index as the stored ticker symbol in the ticker symbol arraylist.
 ArrayList<String> tickers;
 ArrayList<Widget> widgets;
 PFont font;
 int screenCount;
 ArrayList<Screen> screens;
+ArrayList<TextPanel> textPanels;
+Table stockInfo;
 
 void setup() {
   size(500, 500);
   String[] dataToLoad = loadStrings("daily_prices1k.csv");
+  stockInfo = loadTable("stocks.csv","header");
   font = loadFont("ArialMT-32.vlw");
   textFont(font); //<>// //<>// //<>// //<>//
   tickers = new ArrayList<String>();
   data = new ArrayList[0];
   screens = new ArrayList<Screen>();
+  textPanels = new ArrayList<TextPanel>();
   screenCount = -1;
   loadData(dataToLoad);
   widgets = createWidgets();
@@ -52,6 +57,11 @@ void loadData(String[] dataToLoad) {
             data[data.length-1] = new ArrayList<Datapoint>();
             addLocation = data.length-1;
             tickers.add(currentWord);
+            // Create Text data which can be passed to screen (or we can adapt these functions for screens?)
+            // This only happens on the first occurence of a ticker
+            TableRow infoRow = stockInfo.findRow(currentWord, "ticker"); //<>//
+            textPanels.add(new TextPanel(infoRow.getString("ticker"), infoRow.getString("exchange"), infoRow.getString("name"), infoRow.getString("sector"), infoRow.getString("industry"), font));
+            // End of text panel update
           } else {
             // Exists
             addLocation = tickerLoc;
