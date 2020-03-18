@@ -22,7 +22,6 @@ void setup() {
   screenCount = -1;
   loadData(dataToLoad);
   widgets = createWidgets();
-  setScreenTicker();
 }
 
 void draw() {
@@ -57,14 +56,14 @@ void loadData(String[] dataToLoad) {
             data[data.length-1] = new ArrayList<Datapoint>();
             addLocation = data.length-1;
             tickers.add(currentWord);
+            screens.add(new Screen(addLocation));
+            screens.get(addLocation).setTicker(tickers.get(addLocation));
             // Create Text data which can be passed to screen (or we can adapt these functions for screens?)
             // This only happens on the first occurence of a ticker
             TableRow infoRow = stockInfo.findRow(currentWord, "ticker"); //<>//
             textPanels.add(new TextPanel(infoRow.getString("ticker"), infoRow.getString("exchange"), infoRow.getString("name"), infoRow.getString("sector"), infoRow.getString("industry"), font));
             // End of text panel update
 
-            // Update screen
-            init_screens(currdp); // change constructor(?)
           } else {
             // Exists
             addLocation = tickerLoc;
@@ -132,14 +131,6 @@ void drawWidgets() {
   }
 }
 
-void init_screens(Datapoint stock) {
-  screens.add(new Screen (stock));
-}
-void setScreenTicker() {
-  for (int i =0; i < tickers.size(); i ++) {
-    screens.get(i).setTicker(tickers.get(i));
-  }
-}
 
 
 void mouseMoved() {
