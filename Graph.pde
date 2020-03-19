@@ -34,6 +34,15 @@ class Graph{
     void draw(int x, int y){
       fill(color(backgroundDark));
       rect(x,y,graph_width,graph_height);
+      padding = 50;
+        minDate = min(dates);
+        maxDate = max(dates);
+        minX = 0 + padding;
+        maxX = graph_width - padding;
+        minVal = 0;
+        maxVal = max(parseInt(adj_closes));
+        minY = graph_height - padding;
+        maxY = 0 + padding;
       for (int i = 1; i < datapoints.size(); i++) {
           int oldDate = dates[i-1];
           int newDate = dates[i];
@@ -58,14 +67,6 @@ class Graph{
             adj_closes[adj_closes.length-1] = dp.adjusted_close;
             dates[dates.length-1]=parseInt(easyFormat.format(dp.date));
         }
-        padding = 50;
-        minDate = min(dates);
-        maxDate = max(dates);
-        minX = 0 + padding;
-        maxX = graph_width - padding;
-        minVal = 0;
-        maxVal = max(parseInt(adj_closes));
-        minY = graph_height - padding;
-        maxY = 0 + padding;
+        
     }
 }
