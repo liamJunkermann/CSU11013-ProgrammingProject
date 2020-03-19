@@ -1,4 +1,4 @@
-// Load Data //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
+// Load Data //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
 ArrayList[] data; // data is basically an array to store more datapoint arraylists. 
                   // Where all the stock data for each ticker is stored in the same index as the stored ticker symbol in the ticker symbol arraylist.
 ArrayList<String> tickers;
@@ -14,7 +14,7 @@ void setup() {
   String[] dataToLoad = loadStrings("daily_prices1k.csv");
   stockInfo = loadTable("stocks.csv","header");
   font = loadFont("ArialMT-32.vlw");
-  textFont(font); //<>// //<>// //<>// //<>//
+  textFont(font); //<>// //<>// //<>//
   textAlign(LEFT, BOTTOM);   //Centers text on widget
   tickers = new ArrayList<String>();
   data = new ArrayList[0];
@@ -22,6 +22,8 @@ void setup() {
   textPanels = new ArrayList<TextPanel>();
   screenCount = -1;
   loadData(dataToLoad);
+  sortData();
+  graphSetup();
   widgets = createWidgets();
 }
 
@@ -60,7 +62,7 @@ void loadData(String[] dataToLoad) {
             screens.add(new Screen(addLocation));
             screens.get(addLocation).setTicker(tickers.get(addLocation));
             // Create Text data which can be passed to screen (or we can adapt these functions for screens?)
-            // This only happens on the first occurence of a ticker
+            // This only happens on the first occurence of a ticker //<>//
             TableRow infoRow = stockInfo.findRow(currentWord, "ticker"); //<>//
             textPanels.add(new TextPanel(infoRow.getString("ticker"), infoRow.getString("exchange"), infoRow.getString("name"), infoRow.getString("sector"), infoRow.getString("industry"), font));
             // End of text panel update
@@ -105,8 +107,32 @@ void loadData(String[] dataToLoad) {
     }
     data[addLocation].add(currdp);
   }
+  println("Data Loaded");
 }
 
+void sortData(){
+  for(ArrayList<Datapoint> tickerDps : data){
+    int n = tickerDps.size(); 
+    for (int i = 0; i < n-1; i++){
+      for (int j = 0; j < n-i-1; j++) {
+        if (int(easyFormat.format(tickerDps.get(j).date)) > int(easyFormat.format(tickerDps.get(j+1).date))){
+          // swap arr[j+1] and arr[
+          Datapoint temp = tickerDps.get(j);
+          tickerDps.set(j, tickerDps.get(j+1));
+          tickerDps.set(j+1, temp);
+        }
+      }
+    }
+  }
+  println("data sorted");
+}
+
+
+void graphSetup(){
+  for(Screen screen : screens){
+    screen.graphSetup();
+  }
+}
 ArrayList<Widget> createWidgets() {
   int X = 0;
   int startY = 0;

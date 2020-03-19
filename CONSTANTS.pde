@@ -3,6 +3,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Arrays;
 final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-mm-dd");
+final DateFormat easyFormat = new SimpleDateFormat("yyyymmdd");
 final int EVENT_NULL = -1;
 
 color backgroundLight = #2f5b9f;

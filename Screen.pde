@@ -3,8 +3,9 @@ class Screen {
   Widget backButton;
   int indexOfStock;
   float open_price, close_price, adjusted_close, low, high;
-    int volume;
-    Date date;
+  int volume;
+  Date date;
+  Graph graph;
 
   Screen(int index) {
     indexOfStock =  index;
@@ -14,10 +15,14 @@ class Screen {
   void draw() {
     background(backgroundLight);
     text(ticker, 200, 50);
-    textPanels.get(indexOfStock).draw(10,10);
+    graph.draw(10, 10);
+    textPanels.get(indexOfStock).draw(10,graph.graph_height + 10);
     backButton.draw();
   }
   void setTicker (String ticker){
     this.ticker = ticker;
+  }
+  void graphSetup(){
+    graph = new Graph(data[indexOfStock]);
   }
 }

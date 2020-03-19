@@ -1,3 +1,0 @@
-class Row{
-    int colNum;
-}
