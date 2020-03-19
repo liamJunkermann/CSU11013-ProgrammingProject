@@ -34,14 +34,14 @@ class Graph{
     void draw(int x, int y){
       fill(color(backgroundDark));
       rect(x,y,graph_width,graph_height);
-      padding = 50;
+      padding = 15;
       minDate = min(dates);
       maxDate = max(dates);
       minX = x + padding;
-      maxX = graph_width - padding;
+      maxX = (x+graph_width) - padding;
       minVal = 0;
       maxVal = max(parseInt(adj_closes));
-      minY = graph_height - padding;
+      minY = (y+graph_height) - padding;
       maxY = y + padding;
       for (int i = 1; i < datapoints.size(); i++) {
           int oldDate = dates[i-1];
