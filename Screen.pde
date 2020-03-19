@@ -14,10 +14,11 @@ class Screen {
 
   void draw() {
     background(backgroundLight);
-    text(ticker, 200, 50);
-    textPanels.get(indexOfStock).draw(10,250);
+    text(ticker, 200, 100);
+    textPanels.get(indexOfStock).draw(200,350);
     backButton.draw();
-    graph.draw(10,10);
+    graph.draw(200,100);
+    drawWidgets();
   }
   void setTicker (String ticker){
     this.ticker = ticker;
