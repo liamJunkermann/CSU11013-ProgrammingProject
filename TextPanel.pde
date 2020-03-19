@@ -41,9 +41,9 @@ class TextPanel{
     // x and y of the text box start location called from screen
     void draw(int x, int y){
         background(color(#2f5b9f));
-        textSize(32);
+        textSize(30);
         text("Name: "+name, x, y+incrementer);
-        textSize(20);
+        textSize(18);
         text("Exchange: " + exchange, x, y+(incrementer*3));
         text("Sector: " + sector, x, y+(incrementer*4)+5);
         text("Industry: " + industry, x, y+(incrementer*5)+10);

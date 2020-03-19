@@ -14,7 +14,7 @@ class Graph{
     int maxY;
 
     Graph(ArrayList<Datapoint> datapoints){
-        this.datapoints = datapoints; //<>//
+        this.datapoints = datapoints;
         graph_height = 200;
         graph_width = 300;
         adj_closes = new float[0];
@@ -53,7 +53,6 @@ class Graph{
     void graphSetup(){
         println("Graph Setup");
         for (Datapoint dp : datapoints ) {
-            println(dp.open_price);
             adj_closes = Arrays.copyOf(adj_closes, adj_closes.length+1);
             dates = Arrays.copyOf(dates, dates.length+1);
             adj_closes[adj_closes.length-1] = dp.adjusted_close;
