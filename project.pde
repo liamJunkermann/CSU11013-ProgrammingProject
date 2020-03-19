@@ -10,11 +10,12 @@ ArrayList<TextPanel> textPanels;
 Table stockInfo;
 
 void setup() {
-  size(500, 500);
+  size(1000, 500);
   String[] dataToLoad = loadStrings("daily_prices1k.csv");
   stockInfo = loadTable("stocks.csv","header");
   font = loadFont("ArialMT-32.vlw");
   textFont(font); //<>// //<>// //<>// //<>//
+  textAlign(LEFT, BOTTOM);   //Centers text on widget
   tickers = new ArrayList<String>();
   data = new ArrayList[0];
   screens = new ArrayList<Screen>();
@@ -107,23 +108,20 @@ void loadData(String[] dataToLoad) {
 }
 
 ArrayList<Widget> createWidgets() {
-  int startX = 10;
-  int startY = 25;
-  int wWidth = 100;
-  int wHeight = 40;
-  int countX = 0;
+  int X = 0;
+  int startY = 0;
+  int wWidth = 120;
+  int wHeight = 50;
   int countY = 0;
   ArrayList<Widget> returnContent = new ArrayList<Widget>();
   for (String ticker : tickers) {
-    if ((startY + countY)>= height-(wHeight+10)) {
-      countY = 0;
-      countX += wWidth + 10;
-    }
-    returnContent.add(new Widget(startX+countX, startY+countY, wWidth, wHeight, ticker, backgroundDark, font, tickers.indexOf(ticker)));
-    countY += wHeight + 10;
+    returnContent.add(new Widget(X, startY+countY, wWidth, wHeight, ticker, backgroundDark, font, tickers.indexOf(ticker)));
+    countY += wHeight;
   }
   return returnContent;
 }
+
+
 
 void drawWidgets() {
   for (Widget widget : widgets) {
@@ -131,12 +129,18 @@ void drawWidgets() {
   }
 }
 
-
-
 void mouseMoved() {
   int event;
 
   for (Widget widget : widgets) {
+    
+    // SIDEBAR SCROLLING
+    
+    if (mouseX <= widget.width)
+      widget.y = (widget.height * widgets.indexOf(widget)) - mouseY * 2;
+    /* 'mouseY * 2' is an arbitrary distance that thankfully gets us to the bottom of the list,
+        but a more precise calculation using the size of the widgets ArrayList would be preferred. */
+   
     event = widget.getEvent(mouseX, mouseY);
     if (event!= EVENT_NULL) {
       widget.strokeColour = color(0);
