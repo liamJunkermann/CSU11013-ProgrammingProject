@@ -37,12 +37,12 @@ class Graph{
       padding = 50;
         minDate = min(dates);
         maxDate = max(dates);
-        minX = 0 + padding;
+        minX = x + padding;
         maxX = graph_width - padding;
         minVal = 0;
         maxVal = max(parseInt(adj_closes));
         minY = graph_height - padding;
-        maxY = 0 + padding;
+        maxY = y + padding;
       for (int i = 1; i < datapoints.size(); i++) {
           int oldDate = dates[i-1];
           int newDate = dates[i];
