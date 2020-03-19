@@ -33,7 +33,6 @@ void draw() {
     drawWidgets();
   } else {
     screens.get(screenCount).draw();
-    screens.get(screenCount).graph.draw(10,10);
   }
 }
 

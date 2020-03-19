@@ -17,6 +17,7 @@ class Screen {
     text(ticker, 200, 50);
     textPanels.get(indexOfStock).draw(10,250);
     backButton.draw();
+    graph.draw(10,10);
   }
   void setTicker (String ticker){
     this.ticker = ticker;
