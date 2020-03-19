@@ -14,7 +14,7 @@ class Graph{
     int maxY;
 
     Graph(ArrayList<Datapoint> datapoints){
-        this.datapoints = datapoints;
+        this.datapoints = datapoints; //<>//
         graph_height = 200;
         graph_width = 300;
         adj_closes = new float[0];
@@ -35,24 +35,24 @@ class Graph{
       fill(color(backgroundDark));
       rect(x,y,graph_width,graph_height);
       padding = 50;
-        minDate = min(dates);
-        maxDate = max(dates);
-        minX = x + padding;
-        maxX = graph_width - padding;
-        minVal = 0;
-        maxVal = max(parseInt(adj_closes));
-        minY = graph_height - padding;
-        maxY = y + padding;
+      minDate = min(dates);
+      maxDate = max(dates);
+      minX = x + padding;
+      maxX = graph_width - padding;
+      minVal = 0;
+      maxVal = max(parseInt(adj_closes));
+      minY = graph_height - padding;
+      maxY = y + padding;
       for (int i = 1; i < datapoints.size(); i++) {
           int oldDate = dates[i-1];
           int newDate = dates[i];
           float oldVal = adj_closes[i-1];
           float newVal = adj_closes[i];
-          fill(0);
-          stroke(0);
-          line(
+          fill(255);
+          stroke(255);
+          line( //<>//
             map( oldDate, minDate, maxDate, minX, maxX ),
-            map( oldVal, minVal, maxVal, minY, maxY ),
+            map( oldVal, minVal, maxVal, minY, maxY ), //<>//
             map( newDate, minDate, maxDate, minX, maxX ),
             map( newVal, minVal, maxVal, minY, maxY )
           );
