@@ -43,13 +43,19 @@ class Graph{
       maxVal = max(parseInt(adj_closes));
       minY = (y+graph_height) - padding;
       maxY = y + padding;
+      
+      // GRAPH COLOUR
+      if (adj_closes[0] < adj_closes[adj_closes.length-1])
+        stroke(green);
+      else
+        stroke(red);
+      
       for (int i = 1; i < datapoints.size(); i++) {
           int oldDate = dates[i-1];
           int newDate = dates[i];
           float oldVal = adj_closes[i-1];
           float newVal = adj_closes[i];
           fill(255);
-          stroke(255);
           line( //<>//
             map( oldDate, minDate, maxDate, minX, maxX ),
             map( oldVal, minVal, maxVal, minY, maxY ), //<>//
