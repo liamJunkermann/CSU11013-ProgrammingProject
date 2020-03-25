@@ -1,6 +1,6 @@
-// Load Data //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
+// Load Data //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
 ArrayList[] data; // data is basically an array to store more datapoint arraylists. 
-                  // Where all the stock data for each ticker is stored in the same index as the stored ticker symbol in the ticker symbol arraylist.
+// Where all the stock data for each ticker is stored in the same index as the stored ticker symbol in the ticker symbol arraylist.
 ArrayList<String> tickers;
 ArrayList<Widget> widgets;
 PFont font;
@@ -8,13 +8,16 @@ int screenCount;
 ArrayList<Screen> screens;
 ArrayList<TextPanel> textPanels;
 Table stockInfo;
+ArrayList<String> top100changeTickers;
+ArrayList<Float> top100changePercent;
+Screen homeScreen;
 
 void setup() {
   size(1000, 500);
   String[] dataToLoad = loadStrings("daily_prices1k.csv");
-  stockInfo = loadTable("stocks.csv","header");
+  stockInfo = loadTable("stocks.csv", "header");
   font = loadFont("ArialMT-32.vlw");
-  textFont(font); //<>// //<>// //<>//
+  textFont(font);
   textAlign(LEFT, BOTTOM);   //Centers text on widget
   tickers = new ArrayList<String>();
   data = new ArrayList[0];
@@ -25,12 +28,16 @@ void setup() {
   sortData();
   graphSetup();
   widgets = createWidgets();
+  homeScreen = new Screen(-1);
+  top100changeTickers = new ArrayList<String>();
+  top100changePercent = new ArrayList<Float>();
+  calculateBiggestChange();
 }
 
 void draw() {
   if (screenCount == -1) {
-    background(backgroundLight);
-    drawWidgets();
+    homeScreen.draw();
+    printTopNumbers(20, 700,50);  //test, feel free to move or change values, still have to make interactive on screen and change time period
   } else {
     screens.get(screenCount).draw();
   }
@@ -62,11 +69,10 @@ void loadData(String[] dataToLoad) {
             screens.add(new Screen(addLocation));
             screens.get(addLocation).setTicker(tickers.get(addLocation));
             // Create Text data which can be passed to screen (or we can adapt these functions for screens?)
-            // This only happens on the first occurence of a ticker //<>//
-            TableRow infoRow = stockInfo.findRow(currentWord, "ticker"); //<>//
+            // This only happens on the first occurence of a ticker
+            TableRow infoRow = stockInfo.findRow(currentWord, "ticker");
             textPanels.add(new TextPanel(infoRow.getString("ticker"), infoRow.getString("exchange"), infoRow.getString("name"), infoRow.getString("sector"), infoRow.getString("industry"), font));
             // End of text panel update
-
           } else {
             // Exists
             addLocation = tickerLoc;
@@ -110,12 +116,12 @@ void loadData(String[] dataToLoad) {
   println("Data Loaded");
 }
 
-void sortData(){
-  for(ArrayList<Datapoint> tickerDps : data){
+void sortData() {
+  for (ArrayList<Datapoint> tickerDps : data) {
     int n = tickerDps.size(); 
-    for (int i = 0; i < n-1; i++){
+    for (int i = 0; i < n-1; i++) {
       for (int j = 0; j < n-i-1; j++) {
-        if (int(easyFormat.format(tickerDps.get(j).date)) > int(easyFormat.format(tickerDps.get(j+1).date))){
+        if (int(easyFormat.format(tickerDps.get(j).date)) > int(easyFormat.format(tickerDps.get(j+1).date))) {
           // swap arr[j+1] and arr[
           Datapoint temp = tickerDps.get(j);
           tickerDps.set(j, tickerDps.get(j+1));
@@ -128,8 +134,8 @@ void sortData(){
 }
 
 
-void graphSetup(){
-  for(Screen screen : screens){
+void graphSetup() {
+  for (Screen screen : screens) {
     screen.graphSetup();
   }
 }
@@ -155,18 +161,19 @@ void drawWidgets() {
   }
 }
 
+
 void mouseMoved() {
   int event;
 
   for (Widget widget : widgets) {
-    
+
     // SIDEBAR SCROLLING
-    
+
     if (mouseX <= widget.width)
       widget.y = (widget.height * widgets.indexOf(widget)) - mouseY * 2;
     /* 'mouseY * 2' is an arbitrary distance that thankfully gets us to the bottom of the list,
-        but a more precise calculation using the size of the widgets ArrayList would be preferred. */
-   
+     but a more precise calculation using the size of the widgets ArrayList would be preferred. */
+
     event = widget.getEvent(mouseX, mouseY);
     if (event!= EVENT_NULL) {
       widget.strokeColour = color(0);
@@ -199,5 +206,34 @@ void mousePressed() {
     if (screens.get(screenCount).backButton.getEvent(mouseX, mouseY) == 1) {
       screenCount = EVENT_NULL;
     }
+  }
+}
+
+void calculateBiggestChange() {
+  float startPrice;
+  float endPrice;
+  float percentChange;
+  ArrayList<Datapoint> stockData = new ArrayList<Datapoint>();
+  for (int i = 0; i < data.length; i++) {
+    stockData = data[i];
+    startPrice = stockData.get(0).open_price;
+    endPrice = stockData.get(stockData.size() -1).adjusted_close;
+    percentChange = (endPrice - startPrice)/100;
+    if (top100changePercent.size() < 100) {
+      top100changePercent.add(percentChange);
+      top100changeTickers.add(tickers.get(i));
+    }
+    if ((abs(top100changePercent.get(top100changePercent.size()-1))< percentChange) && top100changePercent.size() >= 100) {
+      top100changePercent.set(top100changePercent.size()-1, percentChange);
+      top100changeTickers.set(top100changeTickers.size()-1, tickers.get(i));
+    }
+  }
+}
+
+void printTopNumbers(int numberOfStocks, int x, int y) {
+  text("Top " +numberOfStocks + " Biggest Overall Changes", x, y-20);
+  for (int i =0; i < numberOfStocks; i++) {
+    text(top100changeTickers.get(i)+ ": " + top100changePercent.get(i) + "%", x, y);
+    y+= 20;
   }
 }
