@@ -171,7 +171,7 @@ void mouseMoved() {
     // SIDEBAR SCROLLING
 
     if (mouseX <= widget.width)
-      widget.y = (widget.height * widgets.indexOf(widget)) - mouseY * 2;
+      widget.y = (widget.height * widgets.indexOf(widget)) - mouseY * 2 + 20;
     /* 'mouseY * 2' is an arbitrary distance that thankfully gets us to the bottom of the list,
      but a more precise calculation using the size of the widgets ArrayList would be preferred. */
 
