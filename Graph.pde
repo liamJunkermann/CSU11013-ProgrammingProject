@@ -49,14 +49,16 @@ class Graph {
       fill(white);
       textSize(10);
       text(maxVal, x+2, y+15);
-      String dateFormat = "";
+      String maxDateFormat = "";
+      String minDateFormat = "";
       try {
-         dateFormat = DATE_FORMAT.format(easyFormat.parse(Integer.toString(maxDate)));
+         maxDateFormat = DATE_FORMAT.format(easyFormat.parse(Integer.toString(maxDate)));
+         minDateFormat = DATE_FORMAT.format(easyFormat.parse(Integer.toString(minDate)));
       } catch (Exception pe){
         println("Exception Occurred: "+ pe);
       }
-      text(dateFormat, maxX-textWidth(dateFormat)/2, minY+20);
-
+      text(maxDateFormat, maxX-textWidth(maxDateFormat)/2, minY+20);
+      text(minDateFormat, minX, minY+20);
       
       
       for (int i = 1; i < datapoints.size(); i++) {
@@ -84,12 +86,12 @@ class Graph {
           stroke(green);
           line(newPointX, newPointY, newPointX, highVal);
           noFill();
-          circle(newPointX, highVal, 5);
+          ellipse(newPointX, highVal, 5, 5);
 
           stroke(red);
           line(newPointX, newPointY, newPointX, lowVal);
           noFill();
-          circle(newPointX, lowVal, 5);
+          ellipse(newPointX, lowVal, 5, 5);
       }
     }
 
