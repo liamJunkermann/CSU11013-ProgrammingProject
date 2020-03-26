@@ -7,6 +7,8 @@ final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-mm-dd");
 final DateFormat easyFormat = new SimpleDateFormat("yyyymmdd");
 final int EVENT_NULL = -1;
 
+int currentEvent;
+
 color backgroundLight = #2f5b9f;
 color backgroundDark = #303844;
 color textColor = #5eccff;

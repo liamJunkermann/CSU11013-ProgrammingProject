@@ -11,7 +11,24 @@ class Widget {
     labelColor= textColor;
     strokeColour = color(255);
   }
+  Widget(int width, int height, String label, color widgetColor, PFont widgetFont, int event){
+    this.width = width; this.height= height;
+    this.label=label; this.event=event;
+    this.widgetColor=widgetColor; this.widgetFont=widgetFont;
+    labelColor= textColor;
+    strokeColour = color(255);
+  }
   void draw(){
+    stroke(strokeColour);
+    fill(widgetColor);
+    rect(x,y,width,height);
+    fill(labelColor);
+    textSize(20);
+    
+    text(label, (x+width/2)-(textWidth(label)/2), y+height-12);
+  }
+
+  void draw(int x, int y){
     stroke(strokeColour);
     fill(widgetColor);
     rect(x,y,width,height);

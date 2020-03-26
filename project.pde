@@ -14,11 +14,12 @@ Screen homeScreen;
 
 void setup() {
   size(1000, 500);
-  String[] dataToLoad = loadStrings("daily_prices1k.csv");
+  String[] dataToLoad = loadStrings("daily_prices10k.csv");
   stockInfo = loadTable("stocks.csv", "header");
   font = loadFont("ArialMT-32.vlw");
   textFont(font);
   textAlign(LEFT, BOTTOM);   //Centers text on widget
+  currentEvent = -1;
   tickers = new ArrayList<String>();
   data = new ArrayList[0];
   screens = new ArrayList<Screen>();
@@ -191,6 +192,13 @@ void mouseMoved() {
       screens.get(screenCount).backButton.strokeColour = color(255);
       screens.get(screenCount).backButton.widgetColor = backgroundDark;
     }
+    if(screens.get(screenCount).graph.dataSelector.getEvent(mouseX, mouseY) != EVENT_NULL){
+      screens.get(screenCount).graph.dataSelector.strokeColour = color(0);
+      screens.get(screenCount).graph.dataSelector.widgetColor = color(0);
+    } else {
+      screens.get(screenCount).graph.dataSelector.strokeColour = color(255);
+      screens.get(screenCount).graph.dataSelector.widgetColor = backgroundDark;
+    }
   }
 }
 
@@ -205,6 +213,9 @@ void mousePressed() {
   if (screenCount!= EVENT_NULL) {
     if (screens.get(screenCount).backButton.getEvent(mouseX, mouseY) == 1) {
       screenCount = EVENT_NULL;
+    }
+    if(screens.get(screenCount).graph.dataSelector.getEvent(mouseX, mouseY) == -2){
+      screens.get(screenCount).graph.showDetail *= -1;
     }
   }
 }

@@ -12,13 +12,17 @@ class Graph {
     float maxVal;
     int minY;
     int maxY;
-
+    Widget dataSelector;
+    int showDetail;
+ //<>// //<>// //<>//
     Graph(ArrayList<Datapoint> datapoints){
         this.datapoints = datapoints; //<>// //<>//
         graph_height = 275;
         graph_width = 700;
         adj_closes = new float[0];
         dates = new int[0];
+        showDetail = -1;
+        dataSelector = new Widget(parseInt(textWidth("Data")),50, "Data", color(backgroundDark), font, -2);
         graphSetup();
     }
 
@@ -28,10 +32,13 @@ class Graph {
         this.graph_width = graph_width;
         adj_closes = new float[0];
         dates = new int[0];
+        showDetail = -1;
+        dataSelector = new Widget(parseInt(textWidth("Data")), 50,"Data", color(backgroundDark), font, -2);
         graphSetup();
     }
 
     void draw(int x, int y) {
+      dataSelector.draw(x+graph_width+5, y);
       fill(color(backgroundDark));
       rect(x,y,graph_width,graph_height);
       padding = 30;
@@ -54,8 +61,8 @@ class Graph {
       try {
          maxDateFormat = DATE_FORMAT.format(easyFormat.parse(Integer.toString(maxDate)));
          minDateFormat = DATE_FORMAT.format(easyFormat.parse(Integer.toString(minDate)));
-      } catch (Exception pe){
-        println("Exception Occurred: "+ pe);
+      } catch (Exception e){
+        println("Exception Occurred: "+ e);
       }
       text(maxDateFormat, maxX-textWidth(maxDateFormat)/2, minY+20);
       text(minDateFormat, minX, minY+20);
@@ -83,15 +90,19 @@ class Graph {
             newPointX, // x2
             newPointY // y2
           );
-          stroke(green);
-          line(newPointX, newPointY, newPointX, highVal);
-          noFill();
-          ellipse(newPointX, highVal, 5, 5);
 
-          stroke(red);
-          line(newPointX, newPointY, newPointX, lowVal);
-          noFill();
-          ellipse(newPointX, lowVal, 5, 5);
+          // Need to make this extra data optional
+          //if(showDetail==1){
+            stroke(green);
+            line(newPointX, newPointY, newPointX, highVal);
+            noFill();
+            ellipse(newPointX, highVal, 5, 5);
+
+            stroke(red);
+            line(newPointX, newPointY, newPointX, lowVal);
+            noFill();
+            ellipse(newPointX, lowVal, 5, 5);
+          //}   
       }
     }
 
