@@ -38,7 +38,7 @@ void setup() {
 void draw() {
   if (screenCount == -1) {
     homeScreen.draw();
-    printTopNumbers(20, 700,50);  //test, feel free to move or change values, still have to make interactive on screen and change time period
+    printTopNumbers(20, 700, 50);  //test, feel free to move or change values, still have to make interactive on screen and change time period
   } else {
     screens.get(screenCount).draw();
   }
@@ -192,7 +192,7 @@ void mouseMoved() {
       screens.get(screenCount).backButton.strokeColour = color(255);
       screens.get(screenCount).backButton.widgetColor = backgroundDark;
     }
-    if(screens.get(screenCount).graph.dataSelector.getEvent(mouseX, mouseY) != EVENT_NULL){
+    if (screens.get(screenCount).graph.dataSelector.getEvent(mouseX, mouseY) != EVENT_NULL) {
       screens.get(screenCount).graph.dataSelector.strokeColour = color(0);
       screens.get(screenCount).graph.dataSelector.widgetColor = color(0);
     } else {
@@ -213,8 +213,7 @@ void mousePressed() {
   if (screenCount!= EVENT_NULL) {
     if (screens.get(screenCount).backButton.getEvent(mouseX, mouseY) == 1) {
       screenCount = EVENT_NULL;
-    }
-    if(screens.get(screenCount).graph.dataSelector.getEvent(mouseX, mouseY) == -2){
+    } else if (screens.get(screenCount).graph.dataSelector.getEvent(mouseX, mouseY) == -2) {
       screens.get(screenCount).graph.showDetail *= -1;
     }
   }
