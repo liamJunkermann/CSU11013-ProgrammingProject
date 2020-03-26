@@ -20,7 +20,7 @@ class Screen {
     text(ticker, 200, 100);
     textPanels.get(indexOfStock).draw(200,350);
     backButton.draw();
-    graph.draw(200,100);
+    graph.draw(200,25);
     drawWidgets();
    }
    else{

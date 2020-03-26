@@ -3,7 +3,7 @@ ArrayList[] data; // data is basically an array to store more datapoint arraylis
 // Where all the stock data for each ticker is stored in the same index as the stored ticker symbol in the ticker symbol arraylist.
 ArrayList<String> tickers;
 ArrayList<Widget> widgets;
-PFont font;
+// PFont font;
 int screenCount;
 ArrayList<Screen> screens;
 ArrayList<TextPanel> textPanels;
