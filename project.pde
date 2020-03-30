@@ -10,10 +10,16 @@ ArrayList<TextPanel> textPanels;
 Table stockInfo;
 ArrayList<String> top100changeTickers;
 ArrayList<Float> top100changePercent;
+ArrayList<String> sectorTickers;
+ArrayList<Float> sectorPercents;
+ArrayList<String> sectors;
 Screen homeScreen;
+String sectorQuery;
 
 void setup() {
   size(1000, 500);
+  sectors = new ArrayList<String>();
+  sectorQuery = "ALL";
   String[] dataToLoad = loadStrings("daily_prices10k.csv");
   stockInfo = loadTable("stocks.csv", "header");
   font = loadFont("ArialMT-32.vlw");
@@ -32,13 +38,14 @@ void setup() {
   homeScreen = new Screen(-1);
   top100changeTickers = new ArrayList<String>();
   top100changePercent = new ArrayList<Float>();
-  calculateBiggestChange();
+  sectorTickers = new ArrayList<String>();
+  sectorPercents =  new ArrayList<Float>();
+  calculateBiggestChange(sectorQuery);
 }
 
 void draw() {
   if (screenCount == -1) {
     homeScreen.draw();
-    printTopNumbers(20, 700, 50);  //test, feel free to move or change values, still have to make interactive on screen and change time period
   } else {
     screens.get(screenCount).draw();
   }
@@ -73,6 +80,8 @@ void loadData(String[] dataToLoad) {
             // This only happens on the first occurence of a ticker
             TableRow infoRow = stockInfo.findRow(currentWord, "ticker");
             textPanels.add(new TextPanel(infoRow.getString("ticker"), infoRow.getString("exchange"), infoRow.getString("name"), infoRow.getString("sector"), infoRow.getString("industry"), font));
+            String sector1 = infoRow.getString("sector");
+            sectors.add(sector1);
             // End of text panel update
           } else {
             // Exists
@@ -210,6 +219,13 @@ void mousePressed() {
       screenCount = event;
     }
   }
+  for (int i =0; i < homeScreen.filterButtons.size(); i++) {
+    if (homeScreen.filterButtons.get(i).getEvent(mouseX, mouseY) != EVENT_NULL) {
+      calculateBiggestChange(homeScreen.filterButtons.get(i).label);
+      sectorQuery = homeScreen.filterButtons.get(i).label;
+    }
+  }
+
   if (screenCount!= EVENT_NULL) {
     if (screens.get(screenCount).backButton.getEvent(mouseX, mouseY) == 1) {
       screenCount = EVENT_NULL;
@@ -219,7 +235,9 @@ void mousePressed() {
   }
 }
 
-void calculateBiggestChange() {
+void calculateBiggestChange(String sector) {
+  sectorTickers = new ArrayList<String>();
+  sectorPercents =  new ArrayList<Float>();
   float startPrice;
   float endPrice;
   float percentChange;
@@ -229,21 +247,41 @@ void calculateBiggestChange() {
     startPrice = stockData.get(0).open_price;
     endPrice = stockData.get(stockData.size() -1).adjusted_close;
     percentChange = (endPrice - startPrice)/100;
-    if (top100changePercent.size() < 100) {
-      top100changePercent.add(percentChange);
-      top100changeTickers.add(tickers.get(i));
-    }
-    if ((abs(top100changePercent.get(top100changePercent.size()-1))< percentChange) && top100changePercent.size() >= 100) {
-      top100changePercent.set(top100changePercent.size()-1, percentChange);
-      top100changeTickers.set(top100changeTickers.size()-1, tickers.get(i));
+    if (sector.equals("ALL")) {
+      if (top100changePercent.size() < 100) {
+        top100changePercent.add(percentChange);
+        top100changeTickers.add(tickers.get(i));
+      }
+      if ((abs(top100changePercent.get(top100changePercent.size()-1))< percentChange) && top100changePercent.size() >= 100) {
+        top100changePercent.set(top100changePercent.size()-1, percentChange);
+        top100changeTickers.set(top100changeTickers.size()-1, tickers.get(i));
+      }
+    } else {
+      if (sectors.get(i).equals(sector)) {
+
+        sectorPercents.add(percentChange);
+        sectorTickers.add(tickers.get(i));
+      }
     }
   }
 }
 
-void printTopNumbers(int numberOfStocks, int x, int y) {
-  text("Top " +numberOfStocks + " Biggest Overall Changes", x, y-20);
-  for (int i =0; i < numberOfStocks; i++) {
-    text(top100changeTickers.get(i)+ ": " + top100changePercent.get(i) + "%", x, y);
-    y+= 20;
+
+
+
+
+void printTopNumbers(int numberOfStocks, int x, int y, String sector) {
+  if (sector.equals("ALL")) {
+    text("Top " +numberOfStocks + " Biggest Overall Changes", x, y-20);
+    for (int i =0; i < numberOfStocks; i++) {
+      text(top100changeTickers.get(i)+ ": " + top100changePercent.get(i) + "%", x, y);
+      y+= 20;
+    }
+  } else {
+    text("Changes in " + sector + " Sector", x, y -20);
+    for (int j= 0; j < sectorPercents.size(); j++) {
+      text(sectorTickers.get(j) + ": " + sectorPercents.get(j) + "%", x, y);
+      y+= 20;
+    }
   }
 }
