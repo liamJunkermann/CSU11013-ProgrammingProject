@@ -13,14 +13,15 @@ class Screen {
     indexOfStock = index;
     backButton = new Widget(900, 400, 50, 50, "back", backgroundDark, font, 1);
     if (index < 0) {
-      filterButtons.add(new Widget(250, 50, 275, 50, "CONSUMER SERVICES", backgroundDark, font, -2));
-      filterButtons.add(new Widget(250, 100, 275, 50, "CONSUMER DURABLES", backgroundDark, font, -3));
-      filterButtons.add(new Widget(250, 150, 275, 50, "TECHNOLOGY", backgroundDark, font, -4));
-      filterButtons.add(new Widget(250, 200, 275, 50, "FINANCE", backgroundDark, font, -5));
-      filterButtons.add(new Widget(250, 250, 275, 50, "CAPITAL GOODS", backgroundDark, font, -6));
-      filterButtons.add(new Widget(250, 300, 275, 50, "HEALTHCARE", backgroundDark, font, -7));
-      filterButtons.add(new Widget(250, 350, 275, 50, "N/A", backgroundDark, font, -8));
-      filterButtons.add(new Widget(250, 400, 275, 50, "ALL", backgroundDark, font, -9));
+      filterButtons.add(new Widget(250, 50, 275, 45, "CONSUMER SERVICES", backgroundDark, font, -2));
+      filterButtons.add(new Widget(250, 95, 275, 45, "CONSUMER DURABLES", backgroundDark, font, -3));
+      filterButtons.add(new Widget(250, 140, 275, 45, "TECHNOLOGY", backgroundDark, font, -4));
+      filterButtons.add(new Widget(250, 185, 275, 45, "FINANCE", backgroundDark, font, -5));
+      filterButtons.add(new Widget(250, 230, 275, 45, "CAPITAL GOODS", backgroundDark, font, -6));
+      filterButtons.add(new Widget(250, 275, 275, 45, "ENERGY", backgroundDark, font, -7));
+      filterButtons.add(new Widget(250, 320, 275, 45, "HEALTH CARE", backgroundDark, font, -8));
+      filterButtons.add(new Widget(250, 365, 275, 45, "N/A", backgroundDark, font, -9));
+      filterButtons.add(new Widget(250, 410, 275, 45, "ALL", backgroundDark, font, -10));
     }
   }
 

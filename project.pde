@@ -287,6 +287,8 @@ void printTopNumbers(int numberOfStocks, int x, int y, String sector) {
     textAlign(CENTER, BOTTOM);
     text("Changes in " + sector + " Sector", x+100, y-30);
     textAlign(LEFT, BOTTOM);
+    if (sectorPercents.size() == 0)
+      text("No data available.", x, y);
     for (int j= 0; j < sectorPercents.size(); j++) {
       fill(textColor);
       text(sectorTickers.get(j) + ":", x, y); 
