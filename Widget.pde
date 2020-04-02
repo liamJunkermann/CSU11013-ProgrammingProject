@@ -37,12 +37,12 @@ class Widget {
     
     text(label, (x+width/2)-(textWidth(label)/2), y+height-12);
   }
+  
   int getEvent(int mX, int mY){
      //<>//
     if(mX>x && mX < x+width && mY >y && mY <y+height){
         return event;
-      } else {
-        return EVENT_NULL;
+      } else {      return EVENT_NULL;
       }
   }
 }

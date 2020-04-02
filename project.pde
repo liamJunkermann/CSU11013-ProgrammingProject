@@ -1,4 +1,4 @@
-// Load Data //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
+// Load Data //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
 ArrayList[] data; // data is basically an array to store more datapoint arraylists. 
 // Where all the stock data for each ticker is stored in the same index as the stored ticker symbol in the ticker symbol arraylist.
 ArrayList<String> tickers;
@@ -164,7 +164,6 @@ ArrayList<Widget> createWidgets() {
 }
 
 
-
 void drawWidgets() {
   for (Widget widget : widgets) {
     widget.draw();
@@ -180,7 +179,7 @@ void mouseMoved() {
     // SIDEBAR SCROLLING
 
     if (mouseX <= widget.width)
-      widget.y = (widget.height * widgets.indexOf(widget)) - mouseY * 2 + 20;
+      widget.y = (widget.height * widgets.indexOf(widget)) - mouseY * 3 + 100;
     /* 'mouseY * 2' is an arbitrary distance that thankfully gets us to the bottom of the list,
      but a more precise calculation using the size of the widgets ArrayList would be preferred. */
 
@@ -193,6 +192,7 @@ void mouseMoved() {
       widget.widgetColor = backgroundDark;
     }
   }
+  
   if (screenCount != EVENT_NULL) {
     if (screens.get(screenCount).backButton.getEvent(mouseX, mouseY) != EVENT_NULL) {
       screens.get(screenCount).backButton.strokeColour = color(0);
@@ -211,6 +211,7 @@ void mouseMoved() {
   }
 }
 
+
 void mousePressed() {
   int event;
   for (Widget widget : widgets) {
@@ -219,6 +220,7 @@ void mousePressed() {
       screenCount = event;
     }
   }
+  
   for (int i =0; i < homeScreen.filterButtons.size(); i++) {
     if (homeScreen.filterButtons.get(i).getEvent(mouseX, mouseY) != EVENT_NULL) {
       calculateBiggestChange(homeScreen.filterButtons.get(i).label);
@@ -235,6 +237,7 @@ void mousePressed() {
   }
 }
 
+
 void calculateBiggestChange(String sector) {
   sectorTickers = new ArrayList<String>();
   sectorPercents =  new ArrayList<Float>();
@@ -242,6 +245,7 @@ void calculateBiggestChange(String sector) {
   float endPrice;
   float percentChange;
   ArrayList<Datapoint> stockData = new ArrayList<Datapoint>();
+  
   for (int i = 0; i < data.length; i++) {
     stockData = data[i];
     startPrice = stockData.get(0).open_price;
@@ -267,18 +271,19 @@ void calculateBiggestChange(String sector) {
 }
 
 
-
-
-
 void printTopNumbers(int numberOfStocks, int x, int y, String sector) {
   if (sector.equals("ALL")) {
-    text("Top " +numberOfStocks + " Biggest Overall Changes", x, y-20);
+    textAlign(CENTER, BOTTOM);
+    text("Top " +numberOfStocks + " Biggest Overall Changes", x+100, y-30);
+    textAlign(LEFT, BOTTOM);
     for (int i =0; i < numberOfStocks; i++) {
       text(top100changeTickers.get(i)+ ": " + top100changePercent.get(i) + "%", x, y);
       y+= 20;
     }
   } else {
-    text("Changes in " + sector + " Sector", x, y -20);
+    textAlign(CENTER, BOTTOM);
+    text("Changes in " + sector + " Sector", x+100, y-30);
+    textAlign(LEFT, BOTTOM);
     for (int j= 0; j < sectorPercents.size(); j++) {
       text(sectorTickers.get(j) + ": " + sectorPercents.get(j) + "%", x, y);
       y+= 20;
