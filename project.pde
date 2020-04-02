@@ -277,7 +277,10 @@ void printTopNumbers(int numberOfStocks, int x, int y, String sector) {
     text("Top " +numberOfStocks + " Biggest Overall Changes", x+100, y-30);
     textAlign(LEFT, BOTTOM);
     for (int i =0; i < numberOfStocks; i++) {
-      text(top100changeTickers.get(i)+ ": " + top100changePercent.get(i) + "%", x, y);
+      fill(textColor);
+      text(top100changeTickers.get(i) + ":", x, y);
+      fill((top100changePercent.get(i) > 0) ? green : red); // The percentage is displayed green if positive, red if negative.
+      text(top100changePercent.get(i) + "%", x + textWidth(top100changeTickers.get(i))+10, y);
       y+= 20;
     }
   } else {
@@ -285,7 +288,10 @@ void printTopNumbers(int numberOfStocks, int x, int y, String sector) {
     text("Changes in " + sector + " Sector", x+100, y-30);
     textAlign(LEFT, BOTTOM);
     for (int j= 0; j < sectorPercents.size(); j++) {
-      text(sectorTickers.get(j) + ": " + sectorPercents.get(j) + "%", x, y);
+      fill(textColor);
+      text(sectorTickers.get(j) + ":", x, y); 
+      fill((sectorPercents.get(j) > 0) ? green : red); // The percentage is displayed green if positive, red if negative.
+      text(sectorPercents.get(j) + "%", x + textWidth(sectorTickers.get(j))+10, y);
       y+= 20;
     }
   }
