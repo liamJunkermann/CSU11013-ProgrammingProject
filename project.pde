@@ -1,4 +1,4 @@
-// Load Data //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
+// Load Data //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
 ArrayList[] data; // data is basically an array to store more datapoint arraylists. 
 // Where all the stock data for each ticker is stored in the same index as the stored ticker symbol in the ticker symbol arraylist.
 ArrayList<String> tickers;
@@ -33,7 +33,7 @@ void setup() {
   screens = new ArrayList<Screen>();
   textPanels = new ArrayList<TextPanel>();
   screenCount = -1;
-  loadData(dataToLoad);
+  loadData(dataToLoad, false);
   sortData();
   graphSetup();
   widgets = createWidgets();
@@ -53,9 +53,15 @@ void draw() {
   }
 }
 
-void loadData(String[] dataToLoad) {
+void loadData(String[] dataToLoad, boolean header) {
+  if(header){
+    // skip line 1
+    dataToLoad[0] = "";
+  }
   int addLocation = 0;
   for (String line : dataToLoad) {
+    if(line.length()>0){
+
     line += ","; // triggers adding dates to datapoint objects
     char[] charLine = line.toCharArray();
     String currentWord = "";
@@ -124,6 +130,7 @@ void loadData(String[] dataToLoad) {
       }
     }
     data[addLocation].add(currdp);
+    }
   }
   println("Data Loaded");
 }
