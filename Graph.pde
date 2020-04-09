@@ -64,6 +64,7 @@ class Graph {
       } catch (Exception e){
         println("Exception Occurred: "+ e);
       }
+
       text(maxDateFormat, maxX-textWidth(maxDateFormat)/2, minY+20);
       text(minDateFormat, minX, minY+20);
       
@@ -104,6 +105,8 @@ class Graph {
             ellipse(newPointX, lowVal, 5, 5);
           //}   
       }
+      // Add slider from minx-maxX at minY
+
     }
 
     void graphSetup(){
@@ -116,6 +119,20 @@ class Graph {
             adj_closes[adj_closes.length-1] = dp.adjusted_close;
             dates[dates.length-1]=parseInt(easyFormat.format(dp.date));
         }
+    }
+
+    void filter(int minDate, int maxDate){
+      maxVal = 0;
+        for (Datapoint dp : datapoints ) {
+          if(parseInt(easyFormat.format(dp.date)>minDate && parseInt(easyFormat.format(dp.date)<maxDate){
+            adj_closes = Arrays.copyOf(adj_closes, adj_closes.length+1);
+            if(dp.adjusted_close>maxVal) maxVal = dp.adjusted_close;
+            dates = Arrays.copyOf(dates, dates.length+1);
+            adj_closes[adj_closes.length-1] = dp.adjusted_close;
+            dates[dates.length-1]=parseInt(easyFormat.format(dp.date));
+          } 
+        }
+    }
     }
 } 
 // Potential adding mouse overs (definitely need more time for this)
