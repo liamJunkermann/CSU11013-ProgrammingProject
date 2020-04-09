@@ -14,15 +14,14 @@ class Graph {
     int maxY;
     Widget dataSelector;
     int showDetail;
- //<>// //<>// //<>//
+ //<>// //<>// //<>// //<>//
     Graph(ArrayList<Datapoint> datapoints){
-        this.datapoints = datapoints; //<>// //<>//
+        this.datapoints = datapoints; //<>// //<>// //<>//
         graph_height = 275;
         graph_width = 700;
         adj_closes = new float[0];
         dates = new int[0];
         showDetail = -1;
-        dataSelector = new Widget(parseInt(textWidth("Data")),50, "Data", color(backgroundDark), font, -2);
         graphSetup();
     }
 
@@ -33,7 +32,6 @@ class Graph {
         adj_closes = new float[0];
         dates = new int[0];
         showDetail = -1;
-        dataSelector = new Widget(parseInt(textWidth("Data")), 50,"Data", color(backgroundDark), font, -2);
         graphSetup();
     }
 
@@ -110,6 +108,7 @@ class Graph {
     }
 
     void graphSetup(){
+      dataSelector = new Widget(parseInt(textWidth("Data")),50, "Data", color(backgroundDark), font, -2);
         // println("Graph Setup");
         maxVal = 0;
         for (Datapoint dp : datapoints ) {
@@ -124,7 +123,7 @@ class Graph {
     void filter(int minDate, int maxDate){
       maxVal = 0;
         for (Datapoint dp : datapoints ) {
-          if(parseInt(easyFormat.format(dp.date)>minDate && parseInt(easyFormat.format(dp.date)<maxDate){
+          if(parseInt(easyFormat.format(dp.date))>minDate && parseInt(easyFormat.format(dp.date))<maxDate){
             adj_closes = Arrays.copyOf(adj_closes, adj_closes.length+1);
             if(dp.adjusted_close>maxVal) maxVal = dp.adjusted_close;
             dates = Arrays.copyOf(dates, dates.length+1);
@@ -132,7 +131,6 @@ class Graph {
             dates[dates.length-1]=parseInt(easyFormat.format(dp.date));
           } 
         }
-    }
     }
 } 
 // Potential adding mouse overs (definitely need more time for this)
