@@ -7,11 +7,13 @@ class Screen {
   int volume;
   Date date;
   Graph graph;
+  Slider slider;
 
   Screen(int index) {
     filterButtons = new ArrayList<Widget>();
     indexOfStock = index;
     backButton = new Widget(900, 400, 50, 50, "back", backgroundDark, font, 1);
+    slider = new Slider(200, 300, 700);
     if (index < 0) {
       filterButtons.add(new Widget(250, 50, 275, 45, "CONSUMER SERVICES", backgroundDark, font, -2));
       filterButtons.add(new Widget(250, 95, 275, 45, "CONSUMER DURABLES", backgroundDark, font, -3));
@@ -33,6 +35,7 @@ class Screen {
       textPanels.get(indexOfStock).draw(200, 350);
       backButton.draw();
       graph.draw(200, 25);
+      slider.draw();
       drawWidgets();
     } else {                        // Show filter options
       background(backgroundLight);
