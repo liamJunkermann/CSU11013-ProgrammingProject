@@ -18,13 +18,15 @@ String sectorQuery;
 
 void setup() {
   size(1000, 500);
+  background(0);
+  font = loadFont("ArialMT-32.vlw");
+  textFont(font);
+  textAlign(LEFT, BOTTOM);   //Centers text on widget
+  text("Loading...", width/2-(textWidth("Loading...")/2), height/2);
   sectors = new ArrayList<String>();
   sectorQuery = "ALL";
   String[] dataToLoad = loadStrings("daily_prices10k.csv");
   stockInfo = loadTable("stocks.csv", "header");
-  font = loadFont("ArialMT-32.vlw");
-  textFont(font);
-  textAlign(LEFT, BOTTOM);   //Centers text on widget
   currentEvent = -1;
   tickers = new ArrayList<String>();
   data = new ArrayList[0];
