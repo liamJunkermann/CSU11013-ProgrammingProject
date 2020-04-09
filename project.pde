@@ -18,10 +18,11 @@ String sectorQuery;
 
 void setup() {
   size(1000, 500);
-  background(0);
+  background(backgroundLight);
   font = loadFont("ArialMT-32.vlw");
   textFont(font);
   textAlign(LEFT, BOTTOM);   //Centers text on widget
+  fill(textColor);
   text("Loading...", width/2-(textWidth("Loading...")/2), height/2);
   sectors = new ArrayList<String>();
   sectorQuery = "ALL";
@@ -220,6 +221,11 @@ void mouseMoved() {
   }
 }
 
+void mouseDragged() {
+  if (screenCount != EVENT_NULL) {
+    screens.get(screenCount).slider.move(); 
+  }
+}
 
 void mousePressed() {
   int event;
@@ -238,6 +244,7 @@ void mousePressed() {
   }
 
   if (screenCount!= EVENT_NULL) {
+    screens.get(screenCount).slider.move();
     if (screens.get(screenCount).backButton.getEvent(mouseX, mouseY) == 1) {
       screenCount = EVENT_NULL;
     } else if (screens.get(screenCount).graph.dataSelector.getEvent(mouseX, mouseY) == -2) {

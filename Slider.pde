@@ -18,18 +18,19 @@ public class Slider {
   void draw() {
     fill(white);
     noStroke();
-    rect(sliderPositionX, sliderPositionY, sliderLength, sliderWidth);   // Draw slider bar
+    rect(sliderPositionX, sliderPositionY, sliderLength+handleWidth, sliderWidth);   // Draw slider bar
     rect(startPosition, sliderPositionY, handleWidth, handleWidth);      // Draw handles
     rect(endPosition, sliderPositionY, handleWidth, handleWidth);
   }
   
   void move() {
     //Check if within slider range
-    if (mouseX <= sliderPositionX && mouseX >= sliderPositionX + sliderLength && mouseY >= sliderPositionY && mouseY <= sliderPositionY + handleWidth)
+    if (mouseX >= sliderPositionX - handleWidth && mouseX <= sliderPositionX + sliderLength + handleWidth && mouseY >= sliderPositionY && mouseY <= sliderPositionY + handleWidth)
     {
-      //TODO: change slider handle positions when clicked with the mouse;
-      //startPosition = constrain(mouseX, sliderPositionX, endPosition-handleWidth);
-      //endPosition = constrain(mouseX, startPosition+handleWidth, sliderPositionX+sliderLength);
+      if (mouseX >= startPosition - handleWidth && mouseX <= startPosition+handleWidth*2)
+        startPosition = constrain(mouseX, sliderPositionX, endPosition-handleWidth);
+      else if (mouseX >= endPosition - handleWidth && mouseX <= endPosition+handleWidth*2)
+        endPosition = constrain(mouseX, startPosition+handleWidth, sliderPositionX+sliderLength);
     }
   }
   
