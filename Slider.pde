@@ -37,11 +37,11 @@ public class Slider {
   // Use these functions to calculate what percentage ranges of an arrayList to access.
   
   float getStartPercentage() {
-    return (startPosition-sliderPositionX)/(sliderLength-sliderPositionX);
+    return ((float)startPosition-(float)sliderPositionX)/((float)sliderLength-(float)sliderPositionX);
   }
   
   
   float getEndPercentage() {
-    return (endPosition-sliderPositionX)/(sliderLength-sliderPositionX);
+    return ((float)endPosition-(float)sliderPositionX)/((float)sliderLength-(float)sliderPositionX);
   }
 }

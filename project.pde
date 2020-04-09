@@ -1,4 +1,4 @@
-// Load Data //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
+// Load Data //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
 ArrayList[] data; // data is basically an array to store more datapoint arraylists. 
 // Where all the stock data for each ticker is stored in the same index as the stored ticker symbol in the ticker symbol arraylist.
 ArrayList<String> tickers;
@@ -221,11 +221,13 @@ void mouseMoved() {
   }
 }
 
+
 void mouseDragged() {
   if (screenCount != EVENT_NULL) {
-    screens.get(screenCount).slider.move(); 
+    screens.get(screenCount).slider.move();
   }
 }
+
 
 void mousePressed() {
   int event;
