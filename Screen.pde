@@ -36,6 +36,8 @@ class Screen {
       backButton.draw();
       graph.draw(200, 25);
       slider.draw();
+      graph.sliderStart = slider.getStartPercentage();
+      graph.sliderEnd = slider.getEndPercentage();
       drawWidgets();
     } else {                        // Show filter options
       background(backgroundLight);

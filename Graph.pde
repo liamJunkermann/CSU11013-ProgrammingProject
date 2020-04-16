@@ -1,3 +1,4 @@
+// Graph class - class to calculate and render graph including filtering.
 class Graph {
     ArrayList<Datapoint> datapoints;
     int graph_height, graph_width;
@@ -14,7 +15,9 @@ class Graph {
     int maxY;
     Widget dataSelector;
     int showDetail;
- //<>// //<>// //<>// //<>//
+    float sliderStart; //<>//
+    float sliderEnd;
+ //<>//
     Graph(ArrayList<Datapoint> datapoints){
         this.datapoints = datapoints; //<>// //<>// //<>//
         graph_height = 275;
@@ -22,6 +25,8 @@ class Graph {
         adj_closes = new float[0];
         dates = new int[0];
         showDetail = -1;
+        sliderStart = 0;
+        sliderEnd = 1;
         graphSetup();
     }
 
@@ -32,6 +37,8 @@ class Graph {
         adj_closes = new float[0];
         dates = new int[0];
         showDetail = -1;
+        sliderStart = 0;
+        sliderEnd = 100;
         graphSetup();
     }
 
@@ -45,6 +52,8 @@ class Graph {
       minX = x + padding;
       maxX = (x+graph_width) - padding;
       minVal = 0;
+      float filterMax = map(sliderStart, 0,1,minDate, maxDate);   // adds filter if applied
+      float filterMin = map(sliderEnd, 0,1,minDate, maxDate);     // Adds filter if applied
       //maxVal = Collections.max(Arrays.asList(adj_closes));
       minY = (y+graph_height) - padding;
       maxY = y + padding;
@@ -79,29 +88,32 @@ class Graph {
           // else
           //   stroke(red);
           stroke(white);
-          float newPointX = map(newDate, minDate, maxDate, minX, maxX); 
-          float newPointY = map(newVal, minVal, maxVal, minY, maxY);
-          float highVal = map(datapoints.get(i).high, minVal, maxVal, minY, maxY);
-          float lowVal = map(datapoints.get(i).low, minVal, maxVal, minY, maxY);
-          line(
-            map( oldDate, minDate, maxDate, minX, maxX ), // x1
-            map( oldVal, minVal, maxVal, minY, maxY ), // y1
-            newPointX, // x2
-            newPointY // y2
-          );
+          // if values don't fit in filtered values, skip drawing
+          if(!(newDate>filterMax || newDate<filterMin)){
+            float newPointX = map(newDate, filterMin, filterMax, minX, maxX); 
+            float newPointY = map(newVal, minVal, maxVal, minY, maxY);
+            float highVal = map(datapoints.get(i).high, minVal, maxVal, minY, maxY);
+            float lowVal = map(datapoints.get(i).low, minVal, maxVal, minY, maxY);
+            line(
+              map( oldDate, filterMin, filterMax, minX, maxX ), // x1
+              map( oldVal, minVal, maxVal, minY, maxY ), // y1
+              newPointX, // x2
+              newPointY // y2
+            );
 
-          // Need to make this extra data optional
-          //if(showDetail==1){
-            stroke(green);
-            line(newPointX, newPointY, newPointX, highVal);
-            noFill();
-            ellipse(newPointX, highVal, 5, 5);
+            // Need to make this extra data optional
+            //if(showDetail==1){
+              stroke(green);
+              line(newPointX, newPointY, newPointX, highVal);
+              noFill();
+              ellipse(newPointX, highVal, 5, 5);
 
-            stroke(red);
-            line(newPointX, newPointY, newPointX, lowVal);
-            noFill();
-            ellipse(newPointX, lowVal, 5, 5);
-          //}   
+              stroke(red);
+              line(newPointX, newPointY, newPointX, lowVal);
+              noFill();
+              ellipse(newPointX, lowVal, 5, 5);
+            //}
+          }   
       }
       // Add slider from minx-maxX at minY
 
@@ -119,7 +131,6 @@ class Graph {
             dates[dates.length-1]=parseInt(easyFormat.format(dp.date));
         }
     }
-
     void filter(int minDate, int maxDate){
       maxVal = 0;
         for (Datapoint dp : datapoints ) {
