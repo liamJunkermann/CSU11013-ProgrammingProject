@@ -1,6 +1,6 @@
 class Screen {
   String ticker;
-  Widget backButton;
+  Widget backButton, dateFilter;
   ArrayList<Widget> filterButtons;
   int indexOfStock;
   float open_price, close_price, adjusted_close, low, high;
@@ -24,6 +24,8 @@ class Screen {
       filterButtons.add(new Widget(250, 320, 275, 45, "HEALTH CARE", backgroundDark, font, -8));
       filterButtons.add(new Widget(250, 365, 275, 45, "N/A", backgroundDark, font, -9));
       filterButtons.add(new Widget(250, 410, 275, 45, "ALL", backgroundDark, font, -10));
+      dateFilter = new Widget(420, 10, 170, 30, "Filter by Date", backgroundDark, font, -11);
+      slider.sliderPositionY = 380;
     }
   }
 
@@ -39,23 +41,30 @@ class Screen {
       graph.sliderStart = slider.getStartPercentage();
       graph.sliderEnd = slider.getEndPercentage();
       drawWidgets();
-    } else {                        // Show filter options
+    } else if (indexOfStock == -1) {                        // Show filter options
       background(backgroundLight);
       drawWidgets();
+      dateFilter.draw();
       text("Filter by Sector: ", 250, 40);
       printTopNumbers(20, 650, 70, sectorQuery);
       for (Widget filterButton : filterButtons) {
         filterButton.draw();
       }
+    } else if ( indexOfStock == -2) {
+      background(backgroundLight);
+      backButton.draw();
+      drawWidgets();
+      slider.draw();
+      printTopNumbersDates(150,70); // have to fix issues
     }
   }
-  
-  
+
+
   void setTicker (String ticker) {
     this.ticker= ticker;
   }
-  
-  
+
+
   void graphSetup() {
     graph = new Graph(data[indexOfStock]);
   }

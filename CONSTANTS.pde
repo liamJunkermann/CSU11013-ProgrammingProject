@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-mm-dd");
 final DateFormat easyFormat = new SimpleDateFormat("yyyymmdd");
+final SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
 final int EVENT_NULL = -1;
 
 int currentEvent;

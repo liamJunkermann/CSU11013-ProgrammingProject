@@ -13,8 +13,14 @@ ArrayList<Float> top100changePercent;
 ArrayList<String> sectorTickers;
 ArrayList<Float> sectorPercents;
 ArrayList<String> sectors;
+ArrayList<String> dateTickers;
+ArrayList<Float> datePercents;
+ArrayList<Date> datesList;
 Screen homeScreen;
+Screen dateFilterScreen;
 String sectorQuery;
+int minDate;
+int maxDate;
 
 void setup() {
   size(1000, 500);
@@ -25,6 +31,7 @@ void setup() {
   fill(textColor);
   text("Loading...", width/2-(textWidth("Loading...")/2), height/2);
   sectors = new ArrayList<String>();
+  datesList = new ArrayList<Date>();
   sectorQuery = "ALL";
   String[] dataToLoad = loadStrings("daily_prices10k.csv");
   stockInfo = loadTable("stocks.csv", "header");
@@ -39,98 +46,108 @@ void setup() {
   graphSetup();
   widgets = createWidgets();
   homeScreen = new Screen(-1);
+  dateFilterScreen = new Screen(-2);
   top100changeTickers = new ArrayList<String>();
   top100changePercent = new ArrayList<Float>();
   sectorTickers = new ArrayList<String>();
   sectorPercents =  new ArrayList<Float>();
+  dateTickers = new ArrayList<String>();
+  datePercents =  new ArrayList<Float>();
   calculateBiggestChange(sectorQuery);
+  sortList(top100changePercent, top100changeTickers);
+  sortDates();
+  minDate =0;
+  maxDate =1;
 }
 
 void draw() {
   if (screenCount == -1) {
     homeScreen.draw();
+  } else if (screenCount == -2) {
+    dateFilterScreen.draw();
   } else {
     screens.get(screenCount).draw();
   }
 }
 
 void loadData(String[] dataToLoad, boolean header) {
-  if(header){
+  if (header) {
     // skip line 1
     dataToLoad[0] = "";
   }
   int addLocation = 0;
   for (String line : dataToLoad) {
-    if(line.length()>0){
+    if (line.length()>0) {
 
-    line += ","; // triggers adding dates to datapoint objects
-    char[] charLine = line.toCharArray();
-    String currentWord = "";
-    int count = 0;
-    Datapoint currdp = new Datapoint();
+      line += ","; // triggers adding dates to datapoint objects
+      char[] charLine = line.toCharArray();
+      String currentWord = "";
+      int count = 0;
+      Datapoint currdp = new Datapoint();
 
-    for (char letter : charLine) { // this loop iterates through each array until it finds a comma. Once comma is found it checks which "column" the string data is and then store that data in a new datapoint object. Once all the data is loaded (eg. the entire row is handled), it gets added to an arraylist with the rest of the datapoints for the ticker.
-      if (letter != ',') {
-        currentWord += letter;
-      } else {
-        //println(currentWord);
-        switch(count) {
-          case(0):// This case handles where to store the datapoint object. If its a new ticker a new location is made, otherwise we find the right location to store at.
-          int tickerLoc = tickers.indexOf(currentWord);
-          if (tickerLoc<0) { 
-            // Create new ticker
-            data = Arrays.copyOf(data, data.length+1);
-            data[data.length-1] = new ArrayList<Datapoint>();
-            addLocation = data.length-1;
-            tickers.add(currentWord);
-            screens.add(new Screen(addLocation));
-            screens.get(addLocation).setTicker(tickers.get(addLocation));
-            // Create Text data which can be passed to screen (or we can adapt these functions for screens?)
-            // This only happens on the first occurence of a ticker
-            TableRow infoRow = stockInfo.findRow(currentWord, "ticker");
-            textPanels.add(new TextPanel(infoRow.getString("ticker"), infoRow.getString("exchange"), infoRow.getString("name"), infoRow.getString("sector"), infoRow.getString("industry"), font));
-            String sector1 = infoRow.getString("sector");
-            sectors.add(sector1);
-            // End of text panel update
-          } else {
-            // Exists
-            addLocation = tickerLoc;
-          }
-          break;
-          case(1):
-          currdp.setOpen_price(Float.valueOf(currentWord));
-          break;
-          case(2):
-          currdp.setClose_price(Float.valueOf(currentWord));
-          break;
-          case(3):
-          currdp.setAdjusted_close(Float.valueOf(currentWord));
-          break;
-          case(4):
-          currdp.setLow(Float.valueOf(currentWord));
-          break;
-          case(5):
-          currdp.setHigh(Float.valueOf(currentWord));
-          break;
-          case(6) :
-          currdp.setVolume(Integer.valueOf(currentWord));
-          break;
-          case(7):
-          try {
-            Date date = DATE_FORMAT.parse(currentWord);
-            currdp.setDate(date);
-            //  println(DATE_FORMAT.format(date));
+      for (char letter : charLine) { // this loop iterates through each array until it finds a comma. Once comma is found it checks which "column" the string data is and then store that data in a new datapoint object. Once all the data is loaded (eg. the entire row is handled), it gets added to an arraylist with the rest of the datapoints for the ticker.
+        if (letter != ',') {
+          currentWord += letter;
+        } else {
+          //println(currentWord);
+          switch(count) {
+            case(0):// This case handles where to store the datapoint object. If its a new ticker a new location is made, otherwise we find the right location to store at.
+            int tickerLoc = tickers.indexOf(currentWord);
+            if (tickerLoc<0) { 
+              // Create new ticker
+              data = Arrays.copyOf(data, data.length+1);
+              data[data.length-1] = new ArrayList<Datapoint>();
+              addLocation = data.length-1;
+              tickers.add(currentWord);
+              screens.add(new Screen(addLocation));
+              screens.get(addLocation).setTicker(tickers.get(addLocation));
+              // Create Text data which can be passed to screen (or we can adapt these functions for screens?)
+              // This only happens on the first occurence of a ticker
+              TableRow infoRow = stockInfo.findRow(currentWord, "ticker");
+              textPanels.add(new TextPanel(infoRow.getString("ticker"), infoRow.getString("exchange"), infoRow.getString("name"), infoRow.getString("sector"), infoRow.getString("industry"), font));
+              String sector1 = infoRow.getString("sector");
+              sectors.add(sector1);
+              // End of text panel update
+            } else {
+              // Exists
+              addLocation = tickerLoc;
+            }
             break;
-          } 
-          catch(Exception e) {
-            println("Exception occured: ", e);
+            case(1):
+            currdp.setOpen_price(Float.valueOf(currentWord));
+            break;
+            case(2):
+            currdp.setClose_price(Float.valueOf(currentWord));
+            break;
+            case(3):
+            currdp.setAdjusted_close(Float.valueOf(currentWord));
+            break;
+            case(4):
+            currdp.setLow(Float.valueOf(currentWord));
+            break;
+            case(5):
+            currdp.setHigh(Float.valueOf(currentWord));
+            break;
+            case(6) :
+            currdp.setVolume(Integer.valueOf(currentWord));
+            break;
+            case(7):
+            try {
+              Date date = DATE_FORMAT.parse(currentWord);
+              currdp.setDate(date);
+              datesList.add(date);
+               println(DATE_FORMAT.format(date));
+              break;
+            } 
+            catch(Exception e) {
+              println("Exception occured: ", e);
+            }
           }
+          currentWord = "";
+          count++;
         }
-        currentWord = "";
-        count++;
       }
-    }
-    data[addLocation].add(currdp);
+      data[addLocation].add(currdp);
     }
   }
   println("Data Loaded");
@@ -151,6 +168,23 @@ void sortData() {
     }
   }
   println("data sorted");
+}
+
+void sortDates() {
+  if (datesList!=null) {
+    for (int index=0; index< datesList.size() -1; index++) {
+      int minimumIndex = index;
+      for (int index2=index+1; index2<datesList.size(); index2++) {
+        if (datesList.get(index2).compareTo(datesList.get(minimumIndex)) < 0) {
+          minimumIndex = index2;
+        }
+        Date temp = datesList.get(index);
+        datesList.set(index, datesList.get(minimumIndex));
+        datesList.set(minimumIndex, temp);
+      }
+    }
+    println("dates sorted");
+  }
 }
 
 
@@ -202,8 +236,8 @@ void mouseMoved() {
       widget.widgetColor = backgroundDark;
     }
   }
-  
-  if (screenCount != EVENT_NULL) {
+
+  if (screenCount != EVENT_NULL && screenCount != -2) {
     if (screens.get(screenCount).backButton.getEvent(mouseX, mouseY) != EVENT_NULL) {
       screens.get(screenCount).backButton.strokeColour = color(0);
       screens.get(screenCount).backButton.widgetColor = color(0);
@@ -223,8 +257,11 @@ void mouseMoved() {
 
 
 void mouseDragged() {
-  if (screenCount != EVENT_NULL) {
+  if (screenCount != EVENT_NULL&& screenCount != -2) {
     screens.get(screenCount).slider.move();
+  }
+  if (screenCount == -2) {
+    dateFilterScreen.slider.move();
   }
 }
 
@@ -237,7 +274,13 @@ void mousePressed() {
       screenCount = event;
     }
   }
-  
+  if (screenCount == EVENT_NULL) {
+    if (homeScreen.dateFilter.getEvent(mouseX, mouseY) == -11) {
+      println("pressed");
+      screenCount = -2;
+    }
+  }
+
   for (int i =0; i < homeScreen.filterButtons.size(); i++) {
     if (homeScreen.filterButtons.get(i).getEvent(mouseX, mouseY) != EVENT_NULL) {
       calculateBiggestChange(homeScreen.filterButtons.get(i).label);
@@ -245,12 +288,17 @@ void mousePressed() {
     }
   }
 
-  if (screenCount!= EVENT_NULL) {
+  if (screenCount!= EVENT_NULL && screenCount != -2) {
     screens.get(screenCount).slider.move();
     if (screens.get(screenCount).backButton.getEvent(mouseX, mouseY) == 1) {
       screenCount = EVENT_NULL;
     } else if (screens.get(screenCount).graph.dataSelector.getEvent(mouseX, mouseY) == -2) {
       screens.get(screenCount).graph.showDetail *= -1;
+    }
+  }
+  if (screenCount == -2) {
+    if (dateFilterScreen.backButton.getEvent(mouseX, mouseY) == 1) {
+      screenCount = EVENT_NULL;
     }
   }
 }
@@ -263,7 +311,7 @@ void calculateBiggestChange(String sector) {
   float endPrice;
   float percentChange;
   ArrayList<Datapoint> stockData = new ArrayList<Datapoint>();
-  
+
   for (int i = 0; i < data.length; i++) {
     stockData = data[i];
     startPrice = stockData.get(0).open_price;
@@ -302,6 +350,7 @@ void printTopNumbers(int numberOfStocks, int x, int y, String sector) {
       y+= 20;
     }
   } else {
+    sortList(sectorPercents, sectorTickers);
     textAlign(CENTER, BOTTOM);
     text("Changes in " + sector + " Sector", x+100, y-30);
     textAlign(LEFT, BOTTOM);
@@ -315,4 +364,63 @@ void printTopNumbers(int numberOfStocks, int x, int y, String sector) {
       y+= 20;
     }
   }
+}
+
+void printTopNumbersDates(int x, int y) {
+  text("Changes between " + datesList.get(minDate) + "and " + datesList.get(maxDate), x, y-20);
+  for (int i = 0; i < datePercents.size(); i++) {
+    text(dateTickers.get(i) + ":", x, y); 
+    fill((datePercents.get(i) > 0) ? green : red);
+    y+= 20;
+  }
+  if(datePercents.size() == 0){
+  text("No data between these dates", x,y);
+  }
+}
+
+
+void sortList(ArrayList<Float> percents, ArrayList<String> tickersList) {
+  if (percents!=null) {
+    for (int index=0; index< percents.size() -1; index++) {
+      int minimumIndex = index;
+      for (int index2=index+1; index2<percents.size(); index2++) {
+        if (abs(percents.get(index2)) > abs(percents.get(minimumIndex)))
+          minimumIndex = index2;
+      }
+      float temp = percents.get(index);
+      String tempS = tickersList.get(index);
+      percents.set(index, percents.get(minimumIndex));
+      percents.set(minimumIndex, temp);
+      tickersList.set(index, tickersList.get(minimumIndex));
+      tickersList.set(minimumIndex, tempS);
+    }
+  }
+}
+
+void calculateChangeDates(int minDate, int maxDate) {
+  float startPrice = 0;
+  float endPrice = 0;
+  float percentChange = 0;
+  dateTickers = new ArrayList<String>();
+  datePercents =  new ArrayList<Float>();
+  ArrayList<Datapoint> stockData = new ArrayList<Datapoint>();
+  for (int i =0; i < data.length; i++) {
+    stockData = data[i];
+    startPrice = 0;
+    endPrice = 0;
+    for (int j = 0; j < stockData.size(); j++) {
+      if (parseInt(easyFormat.format(stockData.get(j).date))  == minDate ) {
+        startPrice = stockData.get(j).open_price;
+      }
+      if (parseInt(easyFormat.format(stockData.get(j).date))  == maxDate ) {
+        endPrice = stockData.get(j).adjusted_close;
+      }
+    }
+    if (startPrice != 0 && endPrice != 0 ) {
+      percentChange = (endPrice - startPrice) /100;
+      datePercents.add(percentChange);
+      dateTickers.add(tickers.get(i));
+    }
+  }
+  sortList(datePercents, dateTickers);
 }
