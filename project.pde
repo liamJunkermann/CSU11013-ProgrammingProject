@@ -15,7 +15,7 @@ ArrayList<Float> sectorPercents;
 ArrayList<String> sectors;
 ArrayList<String> dateTickers;
 ArrayList<Float> datePercents;
-ArrayList<Date> datesList;
+ArrayList<String> datesList;
 Screen homeScreen;
 Screen dateFilterScreen;
 String sectorQuery;
@@ -31,7 +31,7 @@ void setup() {
   fill(textColor);
   text("Loading...", width/2-(textWidth("Loading...")/2), height/2);
   sectors = new ArrayList<String>();
-  datesList = new ArrayList<Date>();
+  datesList = new ArrayList<String>();
   sectorQuery = "ALL";
   String[] dataToLoad = loadStrings("daily_prices10k.csv");
   stockInfo = loadTable("stocks.csv", "header");
@@ -57,7 +57,8 @@ void setup() {
   sortList(top100changePercent, top100changeTickers);
   sortDates();
   minDate =0;
-  maxDate =1;
+  maxDate = datesList.size()-1;
+  calculateChangeDates(minDate, maxDate);
 }
 
 void draw() {
@@ -135,8 +136,11 @@ void loadData(String[] dataToLoad, boolean header) {
             try {
               Date date = DATE_FORMAT.parse(currentWord);
               currdp.setDate(date);
-              datesList.add(date);
-               println(DATE_FORMAT.format(date));
+              String year = yearFormat.format(date).toString();
+              datesList.add(year);
+              currdp.setYear(year);
+              println(year);
+              // println(DATE_FORMAT.format(date));
               break;
             } 
             catch(Exception e) {
@@ -171,16 +175,20 @@ void sortData() {
 }
 
 void sortDates() {
+  Set<String> set = new HashSet<String>(datesList);
+  datesList.clear();
+  datesList.addAll(set);
+
   if (datesList!=null) {
-    for (int index=0; index< datesList.size() -1; index++) {
+    for (int index=0; index < datesList.size() -1; index++) {
       int minimumIndex = index;
-      for (int index2=index+1; index2<datesList.size(); index2++) {
-        if (datesList.get(index2).compareTo(datesList.get(minimumIndex)) < 0) {
+      for (int index2 = index + 1; index2 < datesList.size(); index2++) {
+        if (parseInt(datesList.get(index2)) < parseInt(datesList.get(minimumIndex))) {
           minimumIndex = index2;
+          String temp = datesList.get(index);
+          datesList.set(index, datesList.get(minimumIndex));
+          datesList.set(minimumIndex, temp);
         }
-        Date temp = datesList.get(index);
-        datesList.set(index, datesList.get(minimumIndex));
-        datesList.set(minimumIndex, temp);
       }
     }
     println("dates sorted");
@@ -260,9 +268,6 @@ void mouseDragged() {
   if (screenCount != EVENT_NULL&& screenCount != -2) {
     screens.get(screenCount).slider.move();
   }
-  if (screenCount == -2) {
-    dateFilterScreen.slider.move();
-  }
 }
 
 
@@ -299,6 +304,35 @@ void mousePressed() {
   if (screenCount == -2) {
     if (dateFilterScreen.backButton.getEvent(mouseX, mouseY) == 1) {
       screenCount = EVENT_NULL;
+    }
+    for (int i =0; i < dateFilterScreen.yearButtons.size(); i++) {
+      if (dateFilterScreen.yearButtons.get(i).getEvent(mouseX, mouseY) < -1 && dateFilterScreen.yearButtons.get(i).getEvent(mouseX, mouseY) > -6) {
+        minDate = findIndex(dateFilterScreen.yearButtons.get(i).label);
+        calculateChangeDates(minDate, maxDate);
+      } else if (dateFilterScreen.yearButtons.get(i).getEvent(mouseX, mouseY) < -6 && dateFilterScreen.yearButtons.get(i).getEvent(mouseX, mouseY) > -10) {
+        maxDate = findIndex(dateFilterScreen.yearButtons.get(i).label);
+        calculateChangeDates(minDate, maxDate);
+      } else if (dateFilterScreen.yearButtons.get(i).getEvent(mouseX, mouseY) == -10) {
+        if (minDate > 0) {
+          minDate --;
+          calculateChangeDates(minDate, maxDate);
+        }
+      } else if (dateFilterScreen.yearButtons.get(i).getEvent(mouseX, mouseY) == -11) {
+        if (minDate < datesList.size() && minDate < maxDate) {
+          minDate ++;
+          calculateChangeDates(minDate, maxDate);
+        }
+      } else if (dateFilterScreen.yearButtons.get(i).getEvent(mouseX, mouseY) == -12) {
+        if (maxDate > 0 && maxDate > minDate) {
+          maxDate--;
+          calculateChangeDates(minDate, maxDate);
+        }
+      } else if (dateFilterScreen.yearButtons.get(i).getEvent(mouseX, mouseY) == -13) {
+        if (maxDate < datesList.size()) {
+          maxDate ++;
+          calculateChangeDates(minDate, maxDate);
+        }
+      }
     }
   }
 }
@@ -371,10 +405,11 @@ void printTopNumbersDates(int x, int y) {
   for (int i = 0; i < datePercents.size(); i++) {
     text(dateTickers.get(i) + ":", x, y); 
     fill((datePercents.get(i) > 0) ? green : red);
+    text(datePercents.get(i) + "%", x + 100, y);
     y+= 20;
   }
-  if(datePercents.size() == 0){
-  text("No data between these dates", x,y);
+  if (datePercents.size() == 0) {
+    text("No data between these dates", x, y);
   }
 }
 
@@ -409,10 +444,10 @@ void calculateChangeDates(int minDate, int maxDate) {
     startPrice = 0;
     endPrice = 0;
     for (int j = 0; j < stockData.size(); j++) {
-      if (parseInt(easyFormat.format(stockData.get(j).date))  == minDate ) {
+      if (datesList.get(minDate).contentEquals(stockData.get(j).year)) {
         startPrice = stockData.get(j).open_price;
       }
-      if (parseInt(easyFormat.format(stockData.get(j).date))  == maxDate ) {
+      if (datesList.get(maxDate).contentEquals(stockData.get(j).year)) {
         endPrice = stockData.get(j).adjusted_close;
       }
     }
@@ -423,4 +458,14 @@ void calculateChangeDates(int minDate, int maxDate) {
     }
   }
   sortList(datePercents, dateTickers);
+}
+
+int findIndex(String year) {
+  int index = -1;
+  for (int i = 0; i < datesList.size(); i++) {
+    if (year.contentEquals(datesList.get(i))) {
+      index = i;
+    }
+  }
+  return index;
 }
