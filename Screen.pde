@@ -64,7 +64,7 @@ void draw() {
     graph.sliderStart = slider.getStartPercentage();
     graph.sliderEnd = slider.getEndPercentage();
     drawWidgets();
-  } else if (indexOfStock == -1) {                        // Show filter options
+  } else if (indexOfStock == -1) {         // Show filter options by category
     background(backgroundLight);
     drawWidgets();
     dateFilter.draw();
@@ -73,11 +73,12 @@ void draw() {
     for (Widget filterButton : filterButtons) {
       filterButton.draw();
     }
-  } else if ( indexOfStock == -2) {
+  } else if ( indexOfStock == -2) {        // Show filter options by date
     background(backgroundLight);
     backButton.draw();
     drawWidgets();
     printTopNumbersDates(650, 70);
+    fill(textColor);
     text("Set minimum to: ", 150, 40);
     text("Set maximum to: ", 150, 140);
     text("Minimum: ", 220, 240);

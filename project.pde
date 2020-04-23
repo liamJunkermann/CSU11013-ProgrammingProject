@@ -403,6 +403,7 @@ void printTopNumbers(int numberOfStocks, int x, int y, String sector) {
 void printTopNumbersDates(int x, int y) {
   text("Changes between " + datesList.get(minDate) + "and " + datesList.get(maxDate), x, y-20);
   for (int i = 0; i < datePercents.size(); i++) {
+    fill(textColor);
     text(dateTickers.get(i) + ":", x, y); 
     fill((datePercents.get(i) > 0) ? green : red);
     text(datePercents.get(i) + "%", x + 100, y);
