@@ -1,3 +1,11 @@
+//Created by April Sheeran 12/3/2020
+//Fixed issues and displays correct stock info by April Sheeran 18/3/2020
+//Graphs drawn in screen class + sidebar always visible by April Sheeran 19/3/2020
+//Print list of biggest overall changes in stock price by April Sheeran 25/3/2020
+//Print list of biggest changes in stock price by year by April Sheeran 23/4/2020
+
+
+
 class Screen {
   String ticker;
   Widget backButton, dateFilter;

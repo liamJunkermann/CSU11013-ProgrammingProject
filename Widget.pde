@@ -1,3 +1,5 @@
+//Created by Liam Junkermann 11/3/2020
+
 class Widget {
   int x, y, width, height;
   String label; int event;

@@ -1,4 +1,25 @@
-// Load Data //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
+//Created by Liam Junkermann 11//3/2020 //<>//
+//Started data parsing and displaying items in window
+//Added colours by Liam O'Lionard 12/3/2020
+//MousePressed and code to navigate screens by April Sheeran 16/3/2020
+//Screen_init update by Liam Junkermann 18/3/2020
+//Added scrolling sidebar by Liam O'Lionard 19/3/2020
+//Added code to calculate biggest overall change in stock prices by April Sheeran 25/3/2020
+//Graph updates and placement of graphs update by Liam Junkermann 26/3/2020
+//Fixed errors by April Sheeran 26/3/2020
+//Adjusted scrollbar by Liam O'Lionard 26/3/2020
+//Added code to allow user to select sector to filter biggest changes by by April Sheeran 30/3/2020
+//Fixed layout and errors and added colour to stock percentages by Liam O'Lionard 2/4/2020
+//Added loading screen and code cleanup by Liam Junkermann 9/4/2020
+//Added click-and-drag functionality to slider by Liam O'Lionard 9/4/2020
+//Code to filter biggest changes by year, buttons to allow user interaction and mouseMoved updated 23/4/2020
+//Fixed colours on filtering screen by Liam O'Lionard 23/4/2020
+
+
+
+
+
+// Load Data //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>// //<>//
 ArrayList[] data; // data is basically an array to store more datapoint arraylists. 
 // Where all the stock data for each ticker is stored in the same index as the stored ticker symbol in the ticker symbol arraylist.
 ArrayList<String> tickers;

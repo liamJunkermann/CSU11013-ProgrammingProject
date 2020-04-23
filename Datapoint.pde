@@ -1,3 +1,5 @@
+//Created by Liam Junkermann 11/3/2020
+
 class Datapoint {
   // String ticker;
   float open_price, close_price, adjusted_close, low, high;

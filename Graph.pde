@@ -1,3 +1,13 @@
+//Created by Liam Junkermann 19/3/2020
+//Initial setup of graphs
+//Fixed graphs and added colour by Liam Junkermann 19/3/2020
+//Added graph colour by Liam O'Lionard 19/3/2020
+//Added earliest date to graph and changed circle() to ellipse() by Liam O'Lionard 26/3/2020
+//Details on graph updated by Liam Junkermann 26/3/2020
+//Created filter option by Liam Junkermann 9/4/2020
+//Updates including filtering by date by Liam Junkermann 16/4/2020
+
+
 // Graph class - class to calculate and render graph including filtering.
 class Graph {
     ArrayList<Datapoint> datapoints;

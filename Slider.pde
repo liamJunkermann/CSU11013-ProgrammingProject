@@ -1,3 +1,5 @@
+//Created by Liam O'Lionard 9/4/2020
+
 public class Slider {
   int sliderLength;
   int sliderPositionX;

@@ -1,3 +1,8 @@
+//Created by Liam Junkermann 18/3/2020
+//Displays text info about stock
+//Fixed some stock names length on screen by Liam Junkermann 26/3/2020
+
+
 // Text Panel class to include various data about ticker
 // Text panels can be made as part of screen class
 class TextPanel{
