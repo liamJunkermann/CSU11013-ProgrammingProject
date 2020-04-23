@@ -17,6 +17,7 @@ public class Slider {
      endPosition = sliderPositionX + sliderLength;
   }
   
+  // draw(): Draws slider.
   void draw() {
     fill(white);
     noStroke();
@@ -25,6 +26,7 @@ public class Slider {
     rect(endPosition, sliderPositionY, handleWidth, handleWidth);
   }
   
+  // move(): Adjusts start and end handles of the slider, using mouse input.
   void move() {
     //Check if within slider range
     if (mouseX >= sliderPositionX - handleWidth && mouseX <= sliderPositionX + sliderLength + handleWidth && mouseY >= sliderPositionY && mouseY <= sliderPositionY + handleWidth)
@@ -36,13 +38,12 @@ public class Slider {
     }
   }
   
-  // Use these functions to calculate what percentage ranges of an arrayList to access.
-  
+  // getStartPercentage(): Returns percent value of the start handle along the slider.
   float getStartPercentage() {
     return ((float)startPosition-(float)sliderPositionX)/((float)sliderLength-(float)sliderPositionX);
   }
   
-  
+  // getEndPercentage(): Returns percent value of the end handle along the slider.
   float getEndPercentage() {
     return ((float)endPosition-(float)sliderPositionX)/((float)sliderLength-(float)sliderPositionX);
   }

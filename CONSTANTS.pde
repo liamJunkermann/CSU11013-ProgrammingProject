@@ -14,6 +14,7 @@ final int EVENT_NULL = -1;
 
 int currentEvent;
 
+// Colours for the user interface.
 color backgroundLight = #2f5b9f;
 color backgroundDark = #303844;
 color textColor = #5eccff;

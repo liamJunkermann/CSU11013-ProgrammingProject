@@ -249,16 +249,14 @@ void mouseMoved() {
 
   for (Widget widget : widgets) {
 
-    // SIDEBAR SCROLLING
-
+    // Sidebar scrolling code
     if (mouseX <= widget.width)
       widget.y = (widget.height * widgets.indexOf(widget)) - mouseY * 3 + 100;
-    /* 'mouseY * 2' is an arbitrary distance that thankfully gets us to the bottom of the list,
-     but a more precise calculation using the size of the widgets ArrayList would be preferred. */
 
+    // Widget mouseover code
     event = widget.getEvent(mouseX, mouseY);
     if (event!= EVENT_NULL) {
-      widget.strokeColour = color(0);
+      widget.strokeColour = color(0);  // Set widget colour to black if it is moused over.
       widget.widgetColor = color(0);
     } else {
       widget.strokeColour = color(255);
@@ -322,7 +320,7 @@ void mouseMoved() {
   }
 }
 
-
+// Moves a Slider object if clicked and dragged with the mouse.
 void mouseDragged() {
   if (screenCount != EVENT_NULL&& screenCount != -2) {
     screens.get(screenCount).slider.move();
