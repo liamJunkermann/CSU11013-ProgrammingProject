@@ -48,7 +48,7 @@ class Graph {
         dates = new int[0];
         showDetail = -1;
         sliderStart = 0;
-        sliderEnd = 100;
+        sliderEnd = 1;
         graphSetup();
     }
 
@@ -62,8 +62,8 @@ class Graph {
       minX = x + padding;
       maxX = (x+graph_width) - padding;
       minVal = 0;
-      float filterMax = map(sliderStart, 0,1,minDate, maxDate);   // adds filter if applied
-      float filterMin = map(sliderEnd, 0,1,minDate, maxDate);     // Adds filter if applied
+      float filterMin = map(sliderStart, 0,1,minDate, maxDate);   // adds filter if applied
+      float filterMax = map(sliderEnd, 0,1,minDate, maxDate);     // Adds filter if applied
       //maxVal = Collections.max(Arrays.asList(adj_closes));
       minY = (y+graph_height) - padding;
       maxY = y + padding;
@@ -76,8 +76,8 @@ class Graph {
       String maxDateFormat = "";
       String minDateFormat = "";
       try {
-         maxDateFormat = DATE_FORMAT.format(easyFormat.parse(Integer.toString(maxDate)));
-         minDateFormat = DATE_FORMAT.format(easyFormat.parse(Integer.toString(minDate)));
+         maxDateFormat = DATE_FORMAT.format(easyFormat.parse(Integer.toString((int)filterMax)));
+         minDateFormat = DATE_FORMAT.format(easyFormat.parse(Integer.toString((int)filterMin)));
       } catch (Exception e){
         println("Exception Occurred: "+ e);
       }
@@ -99,7 +99,7 @@ class Graph {
           //   stroke(red);
           stroke(white);
           // if values don't fit in filtered values, skip drawing
-          if(!(newDate>filterMax || newDate<filterMin)){
+          if(newDate>filterMin && newDate<filterMax){
             float newPointX = map(newDate, filterMin, filterMax, minX, maxX); 
             float newPointY = map(newVal, minVal, maxVal, minY, maxY);
             float highVal = map(datapoints.get(i).high, minVal, maxVal, minY, maxY);
