@@ -245,6 +245,26 @@ void mouseMoved() {
     }
   }
 
+  if (screenCount == EVENT_NULL) {
+    if (homeScreen.dateFilter.getEvent(mouseX, mouseY) != EVENT_NULL) {
+      homeScreen.dateFilter.strokeColour = color(0);
+      homeScreen.dateFilter.widgetColor = color(0);
+    } else {
+      homeScreen.dateFilter.strokeColour = color(255);
+      homeScreen.dateFilter.widgetColor = backgroundDark;
+    }
+
+    for (Widget button : homeScreen.filterButtons) {
+      if (button.getEvent(mouseX, mouseY) != EVENT_NULL) {
+        button.strokeColour = color(0);
+        button.widgetColor = color(0);
+      } else {
+        button.strokeColour = color(255);
+        button.widgetColor = backgroundDark;
+      }
+    }
+  }
+
   if (screenCount != EVENT_NULL && screenCount != -2) {
     if (screens.get(screenCount).backButton.getEvent(mouseX, mouseY) != EVENT_NULL) {
       screens.get(screenCount).backButton.strokeColour = color(0);
@@ -259,6 +279,24 @@ void mouseMoved() {
     } else {
       screens.get(screenCount).graph.dataSelector.strokeColour = color(255);
       screens.get(screenCount).graph.dataSelector.widgetColor = backgroundDark;
+    }
+  }
+  if (screenCount == -2) {
+    if (dateFilterScreen.backButton.getEvent(mouseX, mouseY) != EVENT_NULL) {
+      dateFilterScreen.backButton.strokeColour = color(0);
+      dateFilterScreen.backButton.widgetColor = color(0);
+    } else {
+      dateFilterScreen.backButton.strokeColour = color(255);
+      dateFilterScreen.backButton.widgetColor = backgroundDark;
+    }
+    for (Widget button : dateFilterScreen.yearButtons) {
+      if (button.getEvent(mouseX, mouseY) != EVENT_NULL) {
+        button.strokeColour = color(0);
+        button.widgetColor = color(0);
+      } else {
+        button.strokeColour = color(255);
+        button.widgetColor = backgroundDark;
+      }
     }
   }
 }
@@ -307,11 +345,15 @@ void mousePressed() {
     }
     for (int i =0; i < dateFilterScreen.yearButtons.size(); i++) {
       if (dateFilterScreen.yearButtons.get(i).getEvent(mouseX, mouseY) < -1 && dateFilterScreen.yearButtons.get(i).getEvent(mouseX, mouseY) > -6) {
-        minDate = findIndex(dateFilterScreen.yearButtons.get(i).label);
-        calculateChangeDates(minDate, maxDate);
+        if (findIndex(dateFilterScreen.yearButtons.get(i).label) < maxDate) { 
+          minDate = findIndex(dateFilterScreen.yearButtons.get(i).label);
+          calculateChangeDates(minDate, maxDate);
+        }
       } else if (dateFilterScreen.yearButtons.get(i).getEvent(mouseX, mouseY) < -6 && dateFilterScreen.yearButtons.get(i).getEvent(mouseX, mouseY) > -10) {
-        maxDate = findIndex(dateFilterScreen.yearButtons.get(i).label);
-        calculateChangeDates(minDate, maxDate);
+        if (findIndex(dateFilterScreen.yearButtons.get(i).label) > minDate) {
+          maxDate = findIndex(dateFilterScreen.yearButtons.get(i).label);
+          calculateChangeDates(minDate, maxDate);
+        }
       } else if (dateFilterScreen.yearButtons.get(i).getEvent(mouseX, mouseY) == -10) {
         if (minDate > 0) {
           minDate --;
@@ -328,7 +370,7 @@ void mousePressed() {
           calculateChangeDates(minDate, maxDate);
         }
       } else if (dateFilterScreen.yearButtons.get(i).getEvent(mouseX, mouseY) == -13) {
-        if (maxDate < datesList.size()) {
+        if (maxDate < datesList.size()-1) {
           maxDate ++;
           calculateChangeDates(minDate, maxDate);
         }
@@ -401,7 +443,7 @@ void printTopNumbers(int numberOfStocks, int x, int y, String sector) {
 }
 
 void printTopNumbersDates(int x, int y) {
-  text("Changes between " + datesList.get(minDate) + "and " + datesList.get(maxDate), x, y-20);
+  text("Changes between " + datesList.get(minDate) + " and " + datesList.get(maxDate), x, y-20);
   for (int i = 0; i < datePercents.size(); i++) {
     fill(textColor);
     text(dateTickers.get(i) + ":", x, y); 

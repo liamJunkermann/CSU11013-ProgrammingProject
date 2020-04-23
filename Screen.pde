@@ -25,7 +25,7 @@ class Screen {
       filterButtons.add(new Widget(250, 320, 275, 45, "HEALTH CARE", backgroundDark, font, -8));
       filterButtons.add(new Widget(250, 365, 275, 45, "N/A", backgroundDark, font, -9));
       filterButtons.add(new Widget(250, 410, 275, 45, "ALL", backgroundDark, font, -10));
-      dateFilter = new Widget(420, 10, 170, 30, "Filter by Date", backgroundDark, font, -11);
+      dateFilter = new Widget(420, 10, 170, 35, "Filter by Date", backgroundDark, font, -11);
     }
     if (index == -2) {
       int x =150;
